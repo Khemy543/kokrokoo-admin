@@ -1,27 +1,15 @@
 {
-  "name": "argon-dashboard-react",
+  "name": "Kokrokoo",
   "version": "1.1.0",
-  "description": "React version of Argon Dashboard by Creative Tim",
+  "description": "Admin krokokoo",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/creativetimofficial/argon-dashboard-react.git"
-  },
   "keywords": [
     "react",
-    "reactjs",
-    "argon",
-    "argon-react",
-    "dashboard",
-    "dashboard-react",
-    "argon-dashboard",
-    "argon-dashboard-react"
+    "reactjs"
   ],
-  "author": "Creative Tim",
+  "author": "Orion-Innovations",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/argon-dashboard-react/issues"
-  },
+  
   "homepage": "https://kokrokoo-admin.herokuapp.com/",
   "scripts": {
     "start": "react-scripts start",

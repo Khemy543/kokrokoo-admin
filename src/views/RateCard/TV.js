@@ -31,17 +31,18 @@ if(all_data !== null){
   console.log("user:",user);
 }
 
-class Print extends React.Component {
+class TV extends React.Component {
     state={
+        details:[],
         isActive:false,
     }
 
     componentDidMount(){
-            this.setState({isActive:true})
-            axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/get-media/3/companies",
+      this.setState({isActive:true})
+            axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/get-media/2/companies",
             {headers:{ 'Authorization':`Bearer ${user}`}})
             .then(res=>{
-              console.log(res.data);
+              console.log("data:",res.data);
               this.setState({isActive:false})
             })
             .catch(error=>{
@@ -50,7 +51,8 @@ class Print extends React.Component {
     }
  
   render() {
-      
+      const {id, address, business_cert,company_name, company_profile,company_type,email,industry_type,
+         isPusblished, media_house,media_type,operation_cert,policy,website} = this.state.details;
     return (
       <>
        <LoadingOverlay 
@@ -70,4 +72,4 @@ class Print extends React.Component {
   }
 }
 
-export default Print;
+export default TV;

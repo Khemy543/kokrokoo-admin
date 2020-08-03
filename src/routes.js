@@ -16,10 +16,16 @@
 
 */
 import Index from "views/Index.js";
-import Users from "views/UserManagement/Users.js";
+import Media from "views/UserManagement/Media.js";
+import Clients from "views/UserManagement/Clients.js";
 import Profile from "views/Settings/Profile.js";
 import ChangePassword from "views/Settings/ChangePassword.js";
 import Login from "views/examples/Login.js";
+import ViewMediaCompany from "views/UserManagement/ViewMediaCompany.js";
+import TV from "views/RateCard/TV.js";
+import Radio from "views/RateCard/Radio.js";
+import Print from "views/RateCard/Print.js";
+
 
 var routes = [
   {
@@ -30,10 +36,25 @@ var routes = [
     layout: "/admin"
   },
   {
-    path: "/users",
-    name: "Users",
+    path: "/media",
+    name: "Media",
     header:"user",
-    component: Users,
+    component: Media,
+    layout: "/admin"
+  },
+  {
+    path: "/clients",
+    name: "Clients",
+    header:"user",
+    component: Clients,
+    layout: "/admin"
+  },
+  {
+    path: "/company-details",
+    name: "Company Details",
+    header:"user",
+    invisible:true,
+    component: ViewMediaCompany,
     layout: "/admin"
   },
   {
@@ -41,29 +62,36 @@ var routes = [
     path: "/subscription",
     name: "Subscriptions",
     header:"subscriptions",
-    component: Users,
+    component: Clients,
     layout: "/admin"
   },
   {
     
-    path: "/tv-and-radio",
-    name: "TV % Radio",
+    path: "/tv-media-companies",
+    name: "TV Media",
     header:"rate",
-    component: Users,
+    component: TV,
     layout: "/admin"
   },
   {
-    path: "/paper",
-    name: "Paper",
+    path: "/radio-media-companies",
+    name: "Radio Media",
     header:"rate",
-    component: Users,
+    component: Radio,
+    layout: "/admin"
+  }, 
+  {
+    path: "/print-media-companies",
+    name: "Print Media",
+    header:"rate",
+    component: Print,
     layout: "/admin"
   }, 
   {
     path: "/transactions",
     name: "Transactions",
     header:"transactions",
-    component: Users,
+    component: Clients,
     layout: "/admin"
   },
   {
@@ -77,21 +105,21 @@ var routes = [
     path: "/general-report",
     name: "General",
     header:"report",
-    component: Users,
+    component: Clients,
     layout: "/admin"
   },
   {
     path: "/summary",
     name: "Summary",
     header:"report",
-    component: Users,
+    component: Clients,
     layout: "/admin"
   },
   {
     path: "/audit-trail",
     name: "Audit Trial",
     header:"report",
-    component: Users,
+    component: Clients,
     layout: "/admin"
   },
   {
@@ -112,14 +140,14 @@ var routes = [
     path: "/create-admin",
     name: "Create",
     header:"admin",
-    component: Users,
+    component: Clients,
     layout: "/admin"
   },
   {
     path: "/admins",
-    name: "Users",
+    name: "Admins",
     header:"admin",
-    component: Users,
+    component: Clients,
     layout: "/admin"
   }
 ];

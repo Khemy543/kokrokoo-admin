@@ -35,6 +35,7 @@ import {
   Container,
   Media
 } from "reactstrap";
+import { RateConsumer } from "../../context.js";
 
 
 let user =1;
@@ -93,6 +94,8 @@ componentDidMount(){
                 </InputGroup>
               </FormGroup>
             </Form>
+            <RateConsumer>
+              {value=>(
             <Nav className="align-items-center d-none d-md-flex" navbar>
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
@@ -123,13 +126,15 @@ componentDidMount(){
                     <span>Settings</span>
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                  <DropdownItem onClick={() => value.logout()} style={{cursor:'pointer'}}>
                     <i className="ni ni-user-run" />
                     <span>Logout</span>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>
+          )}
+            </RateConsumer>
           </Container>
         </Navbar>
       </>

@@ -75,7 +75,7 @@ function Login({history}){
       }
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
       setIsActive(false);
       setAlert(true)
     })

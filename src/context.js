@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import decode from "jwt-decode";
+import LoadingOverlay from "react-loading-overlay";
+import FadeLoader from "react-spinners/FadeLoader";
 
 const RateContext = React.createContext();
 
@@ -17,10 +19,18 @@ if(all_data !== null){
 
 class RateProvider extends React.Component{
 
+    state={
+        isActive:false,
+        clients:[],
+        media:[]
+    }
+
 
     componentDidMount(){
        this.isTokenExpired();/* 
        localStorage.clear(); */
+
+       this.getUsers();
     }
 
     isTokenExpired() {
@@ -35,12 +45,81 @@ class RateProvider extends React.Component{
         }
     }
 
+    //get Media and Clients
+    getUsers=()=>{
+        this.setState({isActive:true})
+        axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/fetch-new-registered-accounts",
+        {headers:{ 'Authorization':`Bearer ${user}`}})
+        .then(res=>{
+            console.log(res.data);
+            this.setState(()=>{
+                return{client:res.data.clients, media:res.data.media_admins,isActive:false};
+            });
+        })
+        .catch(error=>{
+            console.log(error);
+            this.setState({isActive:false})
+        })
+    }
+
+
+    
+
+
+    blockMedia=()=>{
+        axios.post("",
+        {headers:{ 'Authorization':`Bearer ${user}`}})
+        .then(res=>{
+            console.log(res.data)
+        })
+        .catch(error=>{
+            console.log(error);
+        })
+    }
+
+    unBlockMedia=()=>{
+        axios.post("",
+        {headers:{ 'Authorization':`Bearer ${user}`}})
+        .then(res=>{
+            console.log(res.data)
+        })
+        .catch(error=>{
+            console.log(error);
+        })
+    }
+
+    //logout
+    logout=()=>{
+        this.setState({isActive:true});
+        axios.post("https://admin-kokrokooad.herokuapp.com/api/admin/logout",null,
+        {headers:{ 'Authorization':`Bearer ${user}`}})
+        .then(res=>{
+            console.log(res.data);
+            if(res.data.status === "logout success"){
+                localStorage.clear();
+                window.location.reload("/")
+            }
+        })
+        .catch(error=>{
+            console.log(error);
+        })
+    }
+
+
     render(){
         return(
             <RateContext.Provider value={{
-                ...this.state
+                ...this.state,
+                blockMedia:this.blockMedia,
+                unBlockMedia:this.unBlockMedia,
+                logout:this.logout
             }}>
+            <LoadingOverlay 
+            active = {this.state.isActive}
+            spinner={<FadeLoader color={'#4071e1'}/>}
+            >
             {this.props.children}
+            </LoadingOverlay>
             </RateContext.Provider>
         );
     }

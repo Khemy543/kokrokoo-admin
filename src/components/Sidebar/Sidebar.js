@@ -127,7 +127,7 @@ class Sidebar extends React.Component {
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
-            style={{fontSize:"14px", fontWeight:600}}
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
           >
           <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
             {prop.name}
@@ -151,7 +151,7 @@ class Sidebar extends React.Component {
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
-            style={{fontSize:"14px", fontWeight:600}}
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
           >
           <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
             {prop.name}
@@ -175,7 +175,7 @@ class Sidebar extends React.Component {
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
-            style={{fontSize:"14px", fontWeight:600}}
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
           >
           <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
             {prop.name}
@@ -199,7 +199,7 @@ class Sidebar extends React.Component {
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
-            style={{fontSize:"14px", fontWeight:600}}
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
           >
           <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
             {prop.name}
@@ -223,7 +223,7 @@ class Sidebar extends React.Component {
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
-            style={{fontSize:"14px", fontWeight:600}}
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
           >
           <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
             {prop.name}
@@ -247,7 +247,7 @@ class Sidebar extends React.Component {
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
-            style={{fontSize:"14px", fontWeight:600}}
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
           >
           <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
             {prop.name}
@@ -271,7 +271,7 @@ class Sidebar extends React.Component {
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
-            style={{fontSize:"14px", fontWeight:600}}
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
           >
           <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
             {prop.name}
@@ -295,7 +295,7 @@ class Sidebar extends React.Component {
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
-            style={{fontSize:"14px", fontWeight:600}}
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
           >
           <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
             {prop.name}
@@ -444,7 +444,7 @@ class Sidebar extends React.Component {
 
             <Nav navbar>
               <NavItem onClick={this.toggleDashboardCollapse}>
-                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer"}}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
                 <i className="fa fa-home"/>Dashboard{/* <i className = {this.state.dashboardCollapse?"fa fa-chevron-down":"fa fa-chevron-right"} style={{fontSize:"10px",textAlign:"right",float:"right"}}/> */}
                 </NavLink>
               </NavItem>
@@ -454,7 +454,7 @@ class Sidebar extends React.Component {
                
 
               <NavItem onClick={this.toggleUserCollapse}>
-                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer"}}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
                 <i className="fa fa-user"/>User Management
                 </NavLink>
               </NavItem>
@@ -463,7 +463,7 @@ class Sidebar extends React.Component {
                 </Collapse> 
 
               <NavItem onClick={this.toggleSubsCollapse}>
-                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer"}}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
                 <i className="fa fa-briefcase"/>Subscriptions
                 </NavLink>
               </NavItem>
@@ -472,7 +472,7 @@ class Sidebar extends React.Component {
                 </Collapse> 
 
               <NavItem onClick={this.toggleRateCollapse}>
-                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer"}}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
                 <i className="fa fa-eye"/>Rate Cards
                 </NavLink>
               </NavItem>
@@ -481,7 +481,7 @@ class Sidebar extends React.Component {
                 </Collapse> 
 
               <NavItem onClick={this.toggleTransCollapse}>
-                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer"}}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
                 <i className="fa fa-credit-card"/>Transactions
                 </NavLink>
               </NavItem>
@@ -490,7 +490,7 @@ class Sidebar extends React.Component {
                 </Collapse> 
 
               <NavItem onClick={this.toggleReportCollapse}>
-                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer"}}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
                 <i className="fa fa-book"/>Reports
                 </NavLink>
               </NavItem>
@@ -499,7 +499,7 @@ class Sidebar extends React.Component {
                 </Collapse>
 
                 <NavItem onClick={this.toggleSettingsCollapse}>
-                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer"}}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
                 <i className="fa fa-cog"/>Settings
                 </NavLink>
               </NavItem>
@@ -509,7 +509,7 @@ class Sidebar extends React.Component {
 
               
               <NavItem onClick={this.toggleAdminCollapse}>
-                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer"}}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
                 <i className="fa fa-user"/>Admin Management
                 </NavLink>
               </NavItem>

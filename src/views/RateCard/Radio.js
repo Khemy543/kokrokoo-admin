@@ -31,14 +31,15 @@ if(all_data !== null){
   console.log("user:",user);
 }
 
-class Print extends React.Component {
+class Radio extends React.Component {
     state={
+        details:[],
         isActive:false,
     }
 
     componentDidMount(){
-            this.setState({isActive:true})
-            axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/get-media/3/companies",
+        this.setState({isActive:true})
+            axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/get-media/2/companies",
             {headers:{ 'Authorization':`Bearer ${user}`}})
             .then(res=>{
               console.log(res.data);
@@ -70,4 +71,4 @@ class Print extends React.Component {
   }
 }
 
-export default Print;
+export default Radio;

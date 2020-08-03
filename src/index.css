@@ -7,5 +7,19 @@
 }
 
 .nav-link{
-    color:white !important;
+    color:white;
+}
+
+.nav-tabs-navigation {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.nav-tabs-wrapper {
+  display: inline-block;
+  margin-bottom: -6px;
+  margin-left: 1.25%;
+  margin-right: 1.25%;
+  position: relative;
+  width: auto;
 }
