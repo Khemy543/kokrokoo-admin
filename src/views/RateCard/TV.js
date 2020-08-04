@@ -51,8 +51,6 @@ class TV extends React.Component {
     }
  
   render() {
-      const {id, address, business_cert,company_name, company_profile,company_type,email,industry_type,
-         isPusblished, media_house,media_type,operation_cert,policy,website} = this.state.details;
     return (
       <>
        <LoadingOverlay 

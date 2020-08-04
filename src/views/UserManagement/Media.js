@@ -40,6 +40,11 @@ import {
 import Header from "components/Headers/Header.js";
 import { RateConsumer } from "../../context.js";
 
+let user= null;
+let all_data = JSON.parse(localStorage.getItem('storageData'));
+if(all_data !== null){
+  user = all_data[0];
+}
 
 class Media extends React.Component {
 
@@ -47,7 +52,24 @@ class Media extends React.Component {
     tool1:false,
     tool2:false,
     tool3:false,
-    activeTab:"1"
+    activeTab:"1",
+    media:[]
+  }
+
+  componentDidMount(){
+    this.setState({isActive:true})
+    axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/fetch-new-registered-accounts",
+    {headers:{ 'Authorization':`Bearer ${user}`}})
+    .then(res=>{
+        console.log(res.data);
+        this.setState(()=>{
+            return{media:res.data.media_admins,isActive:false};
+        });
+    })
+    .catch(error=>{
+        console.log(error);
+        this.setState({isActive:false})
+    })
   }
 
   toggle = tab => {
@@ -65,7 +87,7 @@ class Media extends React.Component {
       <>
         <Header />
         {/* Page content */}
-        <Container className="mt--7" fluid>
+        <Container className="mt--8" fluid>
           <div className="nav-tabs-navigation">
             <div className="nav-tabs-wrapper">
             <Nav role="tablist" tabs>
@@ -75,7 +97,7 @@ class Media extends React.Component {
                     className={classnames({ active: this.state.activeTab === "1" })} 
                     onClick={() => { this.toggle("1"); console.log("1") }}
                 >
-                NEW MEDIA COMPANIES
+                MEDIA ACTIVITIES
                 </NavLink>
                 </NavItem>
                 <NavItem>
@@ -84,7 +106,7 @@ class Media extends React.Component {
                     className={classnames({ active: this.state.activeTab === "2" })}
                     onClick={() => { this.toggle("2"); }}
                 >
-                MEDIA ACTIVITIES
+                NEW MEDIA COMPANIES
                 </NavLink>
                 </NavItem>
             </Nav>
@@ -93,7 +115,7 @@ class Media extends React.Component {
 
             {/* tab content */}
             <TabContent activeTab={this.state.activeTab}>
-                <TabPane tabId="1">
+                <TabPane tabId="2">
                  <Container>   
           <Row>
             <Col className="mb-5 mb-xl-0" xl="12" lg="12">
@@ -102,8 +124,6 @@ class Media extends React.Component {
                   NEW MEDIA COMPANIES
                 </CardHeader>
                   <CardBody style={{overflowX:"scroll"}}>
-                   <RateConsumer>
-                     {value=>(
                    <Table bordered>
                    <thead style={{backgroundColor:"#01a9ac",color:"black"}}>
                         <tr>
@@ -120,20 +140,20 @@ class Media extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                      {value.media.map((media,index)=>(
+                    {this.state.media.map((value,index)=>(
                         <tr>
-                            <th>{media.company.id}</th>
-                            <th>{media.company.name}</th>
-                            <th>{media.company.industry}</th>
-                            <th>{media.name}</th>
-                            <th>{media.title}</th>
-                            <th>{media.phone}</th>
-                            <th>{media.email}</th>
-                            <th>{media.created_at.date}<br/> {media.created_at.time}</th>
-                            <th>{media.status}</th>
+                            <th>{value.company.id}</th>
+                            <th>{value.company.name}</th>
+                            <th>{value.company.industry}</th>
+                            <th>{value.name}</th>
+                            <th>{value.title}</th>
+                            <th>{value.phone}</th>
+                            <th>{value.email}</th>
+                            <th>{value.created_at.date}<br/> {value.created_at.time}</th>
+                            <th>{value.status}</th>
                             <th>
                                 <Col className="ml-auto mr-auto">
-                                <Row><Button  color="info"  style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.props.history.push("/admin/company-details",{id:media.id})}><i id="view" className="fa fa-eye"/></Button></Row>
+                                <Row><Button  color="info"  style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.props.history.push("/admin/company-details",{id:value.id})}><i id="view" className="fa fa-eye"/></Button></Row>
                                 <Tooltip placement="right" isOpen={this.state.tool1} target="view" toggle={()=>this.toggle1}>
                                   view company
                                 </Tooltip>
@@ -148,19 +168,17 @@ class Media extends React.Component {
                                 </Col>
                             </th>
                         </tr>
-                      ))}
+                    ))}
                     </tbody>
                   
                    </Table> 
-                  )}
-                    </RateConsumer>   
                    </CardBody>
               </Card>    
             </Col>
           </Row>
           </Container>
           </TabPane>
-          <TabPane tabId="2">
+          <TabPane tabId="1">
             <Container>
             <Row>
             <Col className="mb-5 mb-xl-0" xl="12" lg="12">
@@ -188,11 +206,11 @@ class Media extends React.Component {
                     </thead>
                     <tbody>
                         <tr>
-                            <th>}</th>
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th>}</th>
+                            <th></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>

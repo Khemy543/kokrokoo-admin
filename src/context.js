@@ -6,15 +6,11 @@ import FadeLoader from "react-spinners/FadeLoader";
 
 const RateContext = React.createContext();
 
-let user =1;
-let loggedin_data = false;
+let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
 console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 class RateProvider extends React.Component{
@@ -29,8 +25,6 @@ class RateProvider extends React.Component{
     componentDidMount(){
        this.isTokenExpired();/* 
        localStorage.clear(); */
-
-       this.getUsers();
     }
 
     isTokenExpired() {
@@ -46,21 +40,7 @@ class RateProvider extends React.Component{
     }
 
     //get Media and Clients
-    getUsers=()=>{
-        this.setState({isActive:true})
-        axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/fetch-new-registered-accounts",
-        {headers:{ 'Authorization':`Bearer ${user}`}})
-        .then(res=>{
-            console.log(res.data);
-            this.setState(()=>{
-                return{client:res.data.clients, media:res.data.media_admins,isActive:false};
-            });
-        })
-        .catch(error=>{
-            console.log(error);
-            this.setState({isActive:false})
-        })
-    }
+    
 
 
     
@@ -70,7 +50,8 @@ class RateProvider extends React.Component{
         axios.post("",
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
-            console.log(res.data)
+            console.log(res.data);
+            
         })
         .catch(error=>{
             console.log(error);
@@ -81,7 +62,8 @@ class RateProvider extends React.Component{
         axios.post("",
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
-            console.log(res.data)
+            console.log(res.data);
+            
         })
         .catch(error=>{
             console.log(error);

@@ -68,14 +68,14 @@ var routes = [
   {
     
     path: "/tv-media-companies",
-    name: "TV Media",
+    name: "TV",
     header:"rate",
     component: TV,
     layout: "/admin"
   },
   {
     path: "/radio-media-companies",
-    name: "Radio Media",
+    name: "Radio",
     header:"rate",
     component: Radio,
     layout: "/admin"

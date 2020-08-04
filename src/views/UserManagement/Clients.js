@@ -19,6 +19,8 @@ import React from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 import axios from "axios";
+import LoadingOverlay from "react-loading-overlay";
+import FadeLoader from "react-spinners/FadeLoader";
 // reactstrap components
 import {
   Button,
@@ -55,7 +57,8 @@ class Clients extends React.Component {
     activeTab:"1",
     data:[],
     meta:[],
-    isActive:false
+    isActive:false,
+    client:[]
   }
 
   toggle = tab => {
@@ -64,6 +67,20 @@ class Clients extends React.Component {
     componentDidMount(){
        
       this.getUsers()
+
+        this.setState({isActive:true})
+        axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/fetch-new-registered-accounts",
+        {headers:{ 'Authorization':`Bearer ${user}`}})
+        .then(res=>{
+            console.log(res.data);
+            this.setState(()=>{
+                return{client:res.data.clients,isActive:false};
+            });
+        })
+        .catch(error=>{
+            console.log(error);
+            this.setState({isActive:false})
+        })
     }
  
     getUsers(pageNumber=1){
@@ -85,7 +102,10 @@ class Clients extends React.Component {
       {headers:{ 'Authorization':`Bearer ${user}`}})
       .then(res=>{
           console.log(res.data);
-          this.setState({isActive:false})
+          if(res.data.status === "blocked"){
+            window.location.reload("/")
+            this.setState({isActive:false})
+        }
       })
       .catch(error=>{
           console.log(error.response.data);
@@ -98,7 +118,10 @@ class Clients extends React.Component {
       {headers:{ 'Authorization':`Bearer ${user}`}})
       .then(res=>{
           console.log(res.data);
-          this.setState({isActive:false})
+          if(res.data.status === "unblocked"){
+            window.location.reload("/")
+            this.setState({isActive:false})
+        }
       })
       .catch(error=>{
           console.log(error);
@@ -118,9 +141,14 @@ class Clients extends React.Component {
   render() {
     return (
       <>
+      <LoadingOverlay 
+      active = {this.state.isActive}
+      spinner={<FadeLoader color={'#4071e1'}/>}
+      >
         <Header />
+        
         {/* Page content */}
-        <Container className="mt--7" fluid>
+        <Container className="mt--8" fluid>
           <div className="nav-tabs-navigation">
             <div className="nav-tabs-wrapper">
             <Nav role="tablist" tabs>
@@ -130,7 +158,7 @@ class Clients extends React.Component {
                     className={classnames({ active: this.state.activeTab === "1" })} 
                     onClick={() => { this.toggle("1"); console.log("1") }}
                 >
-                NEW USERS
+                USER ACTIVITIES
                 </NavLink>
                 </NavItem>
                 <NavItem>
@@ -139,7 +167,7 @@ class Clients extends React.Component {
                     className={classnames({ active: this.state.activeTab === "2" })}
                     onClick={() => { this.toggle("2"); }}
                 >
-                USER ACTIVITIES
+                NEW USERS
                 </NavLink>
                 </NavItem>
             </Nav>
@@ -147,7 +175,7 @@ class Clients extends React.Component {
             </div>
             {/* tab content */}
             <TabContent activeTab={this.state.activeTab}>
-                <TabPane tabId="1">
+                <TabPane tabId="2">
                  <Container>   
                     <Row>
                   <Col className="mb-5 mb-xl-0" xl="12" lg="12">
@@ -156,8 +184,6 @@ class Clients extends React.Component {
                     NEW USERS
                     </CardHeader>
                         <CardBody style={{overflowX:"scroll"}}>
-                        <RateConsumer>
-                              {value=>(
                         <Table bordered>
                         <thead style={{backgroundColor:"#01a9ac",color:"black"}}>
                               <tr>
@@ -177,7 +203,7 @@ class Clients extends React.Component {
                               </tr>
                           </thead>
                           <tbody>
-                              {value.clients.map((client, index)=>(
+                            {this.state.client.map((value,index)=>(
                                   <tr>
                                   <th></th>
                                   <th></th>
@@ -199,12 +225,9 @@ class Clients extends React.Component {
                                       </Col>
                                   </th>
                               </tr>
-                              ))}
-                              
+                            ))}
                           </tbody>
                         </Table>    
-                              )}
-                          </RateConsumer>
                         </CardBody>
                     </Card>    
                   </Col>
@@ -212,7 +235,7 @@ class Clients extends React.Component {
                   </Container>
                   </TabPane>
 
-                  <TabPane tabId="2">
+                  <TabPane tabId="1">
                 <Container>   
                    <Row>
                    <Col className="mb-5 mb-xl-0" xl="12" lg="12">
@@ -254,9 +277,15 @@ class Clients extends React.Component {
                                 <Col className="ml-auto mr-auto">
                                 <Row><Button  color="info"  style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.handleView(value.account_type, value.id)}><i id="view" className="fa fa-eye"/></Button></Row>
                                
-                                <Row><Button id="unblock" color="success" style={{padding:'0px 6px 0px 6px', marginBottom:"3px" }} onClick={()=>this.unBlockClient(value.id)}><i className="fa fa-unlock"/></Button></Row>
+                                <Row>
+                                {value.status !== "active"?
+                                <Button id="unblock" color="success" style={{padding:'0px 6px 0px 6px', marginBottom:"3px" }} onClick={()=>this.unBlockClient(value.id)}><i className="fa fa-unlock"/></Button>
+                                :
+                                <Button id="block" color="danger" style={{padding:'0px 7px 0px 7px'}} onClick={()=>this.blockClient(value.id)}><i className="fa fa-lock"/></Button>
+                                }
+                                </Row>
                                 
-                                <Row><Button id="block" color="danger" style={{padding:'0px 7px 0px 7px'}} onClick={()=>this.blockClient(value.id)}><i className="fa fa-lock"/></Button></Row>
+                                <Row></Row>
                                 
                                 </Col>
                             </th>
@@ -286,6 +315,7 @@ class Clients extends React.Component {
                     </TabPane> 
                   </TabContent>
         </Container>
+        </LoadingOverlay>
       </>
     );
   }

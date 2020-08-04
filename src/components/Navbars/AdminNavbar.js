@@ -39,14 +39,10 @@ import { RateConsumer } from "../../context.js";
 
 
 let user =1;
-let loggedin_data = false;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
 console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 class AdminNavbar extends React.Component {

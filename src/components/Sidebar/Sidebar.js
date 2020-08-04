@@ -54,6 +54,8 @@ import {
 
 var ps;
 
+import { RateConsumer } from "../../context.js";
+
 class Sidebar extends React.Component {
   state = {
     collapseOpen: false,
@@ -362,6 +364,8 @@ class Sidebar extends React.Component {
                 <DropdownItem>Something else here</DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
+            <RateConsumer>
+              {value=>(
             <UncontrolledDropdown nav>
               <DropdownToggle nav>
                 <Media className="align-items-center">
@@ -386,12 +390,15 @@ class Sidebar extends React.Component {
                   <span>Settings</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                <DropdownItem onClick={()=>value.logout()}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
+
+          )}
+              </RateConsumer>
           </Nav>
           {/* Collapse */}
           <Collapse navbar isOpen={this.state.collapseOpen}>
