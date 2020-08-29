@@ -94,8 +94,7 @@ React.useEffect(()=>{
                         <div className="col">
                           <CardTitle
                             tag="h5"
-                            className="text-uppercase text-muted mb-0"
-                          >
+                            className="text-uppercase text-muted mb-0">
                             {value.title}
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
