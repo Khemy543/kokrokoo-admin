@@ -55,7 +55,7 @@ function Login({history}){
     axios.post("https://admin-kokrokooad.herokuapp.com/oauth/token",{
       grant_type: "password",
       client_id: 1,
-      client_secret:"xdTjCikoI0Gj7p0AhAgiH2ZrSHMdzFwsK1vpG8VO",
+      client_secret:"CLepT8Ou9Rl5MiSNRNCsYwNVNTO9P7s0RLV2NwoK",
       username: username,
       password: password,
       provider: "admins",
