@@ -66,7 +66,9 @@ class Sidebar extends React.Component {
     transCollapse:false,
     reportCollapse:false,
     settingsCollapse:false,
-    adminCollapse:false
+    adminCollapse:false,
+    volumeCollapse:false,
+    poCollapse:false,
   };
   constructor(props) {
     super(props);
@@ -114,6 +116,13 @@ class Sidebar extends React.Component {
   }
   toggleAdminCollapse=()=>{
     this.setState({adminCollapse:!this.state.adminCollapse})
+  }
+  toggleVolumeCollapse=()=>{
+    this.setState({volumeCollapse:!this.state.volumeCollapse})
+  }
+
+  togglePoCollapse=()=>{
+    this.setState({poCollapse:!this.state.poCollapse})
   }
   // creates the links that appear in the left menu / Sidebar
   createDashboardLinks = routes => {
@@ -307,6 +316,55 @@ class Sidebar extends React.Component {
     }
     })
   }
+
+  createVolumeLinks = routes => {
+    return routes.map((prop, key) => {
+      if(prop.invisible){
+        return null
+      }
+      else if(prop.header === "volume"){
+      return (
+        <NavItem key={key}>
+          <NavLink
+            to={prop.layout + prop.path}
+            tag={NavLinkRRD}
+            onClick={this.closeCollapse}
+            activeClassName="active"
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
+          >
+          <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
+            {prop.name}
+          </NavLink>
+        </NavItem>
+      )
+    }
+    })
+  }
+
+  createPoLinks = routes => {
+    return routes.map((prop, key) => {
+      if(prop.invisible){
+        return null
+      }
+      else if(prop.header === "po"){
+      return (
+        <NavItem key={key}>
+          <NavLink
+            to={prop.layout + prop.path}
+            tag={NavLinkRRD}
+            onClick={this.closeCollapse}
+            activeClassName="active"
+            style={{fontSize:"14px", fontWeight:600, color:"white"}}
+          >
+          <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
+            {prop.name}
+          </NavLink>
+        </NavItem>
+      )
+    }
+    })
+  }
+
   render() {
     const { bgColor, routes, logo } = this.props;
     let navbarBrandProps;
@@ -431,7 +489,7 @@ class Sidebar extends React.Component {
               </Row>
             </div>
             {/* Form */}
-            <Form className="mt-4 mb-3 d-md-none">
+            {/* <Form className="mt-4 mb-3 d-md-none">
               <InputGroup className="input-group-rounded input-group-merge">
                 <Input
                   aria-label="Search"
@@ -445,7 +503,7 @@ class Sidebar extends React.Component {
                   </InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
-            </Form>
+            </Form> */}
             <h4>Navigations</h4>
             <hr className="my-1" />
 
@@ -471,7 +529,7 @@ class Sidebar extends React.Component {
 
               <NavItem onClick={this.toggleSubsCollapse}>
                 <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
-                <i className="fa fa-briefcase"/>Subscriptions
+                <i className="fa fa-briefcase"/>Campaigns
                 </NavLink>
               </NavItem>
               <Collapse isOpen={this.state.subsCollapse}>
@@ -496,6 +554,24 @@ class Sidebar extends React.Component {
                 {this.createTransLinks(routes)}
                 </Collapse> 
 
+                <NavItem onClick={this.togglePoCollapse}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
+                <i className="fa fa-thumbs-up"/>Purchase Order
+                </NavLink>
+              </NavItem>
+              <Collapse isOpen={this.state.poCollapse}>
+                {this.createPoLinks(routes)}
+                </Collapse>
+
+                <NavItem onClick={this.toggleVolumeCollapse}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
+                <i className="fa fa-thumbs-up"/>Volume Discount
+                </NavLink>
+              </NavItem>
+              <Collapse isOpen={this.state.volumeCollapse}>
+                {this.createVolumeLinks(routes)}
+                </Collapse>
+
               <NavItem onClick={this.toggleReportCollapse}>
                 <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer", color:"white"}}>
                 <i className="fa fa-book"/>Reports
@@ -511,7 +587,7 @@ class Sidebar extends React.Component {
                 </NavLink>
               </NavItem>
               <Collapse isOpen={this.state.settingsCollapse}>
-                {this.createSettingsLinks(routes)}>
+                {this.createSettingsLinks(routes)}
                 </Collapse>
 
               
@@ -521,7 +597,7 @@ class Sidebar extends React.Component {
                 </NavLink>
               </NavItem>
               <Collapse isOpen={this.state.adminCollapse}>
-                {this.createAdminLinks(routes)}>
+                {this.createAdminLinks(routes)}
                 </Collapse>
             </Nav>
             

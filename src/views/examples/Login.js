@@ -21,7 +21,6 @@ import React from "react";
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -37,6 +36,7 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import AuthNavbar from "../../components/Navbars/AuthNavbar.js"
 
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 function Login({history}){
   const [username, setUsername] = React.useState("");
@@ -45,17 +45,16 @@ function Login({history}){
   const [alert, setAlert] = React.useState(false);
   const [eye, setEye] = React.useState(false);
   const toggleEye=()=>setEye(!eye);
-  var storageData =[];
 
   const handleSubmit=(e)=>{
     e.preventDefault();
     console.log(e)
     setIsActive(true);
 
-    axios.post("https://admin-kokrokooad.herokuapp.com/oauth/token",{
+    axios.post(`${domain}/oauth/token`,{
       grant_type: "password",
-      client_id: 1,
-      client_secret:"CLepT8Ou9Rl5MiSNRNCsYwNVNTO9P7s0RLV2NwoK",
+      client_id: 1, 
+      client_secret:"8eUhi3fD8JLUSbdUEJR2GTTbiOOPKxYGHa44vliJ",
       username: username,
       password: password,
       provider: "admins",
@@ -63,19 +62,15 @@ function Login({history}){
   )
     .then(res=>{
       console.log(res.data)
-      if(res.data.status == "success"){
+      if(res.data.status === "success"){
         const token_data  = res.data.access_token;
-        const loggedin = true;
-        storageData.push(token_data,loggedin)
-        localStorage.setItem('storageData',JSON.stringify(storageData));
-        console.log("storagedata:",storageData);
+        localStorage.setItem('access_token',token_data);
         window.location.reload("/");
         setIsActive(false);
-
       }
     })
     .catch(error=>{
-      console.log(error)
+      console.log(error.response.data)
       setIsActive(false);
       setAlert(true)
     })

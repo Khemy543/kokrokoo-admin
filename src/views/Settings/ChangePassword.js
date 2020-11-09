@@ -24,14 +24,11 @@ import {
   Card,
   CardHeader,
   CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
   Container,
   Row,
-  Col,Input,InputGroup,InputGroupAddon,Label,InputGroupText,Form,Alert
+  Col,Input,InputGroup,InputGroupAddon,Label,InputGroupText,Form,Alert,
+  Modal,
+  ModalHeader,ModalFooter
 } from "reactstrap";
 import axios from "axios";
 import LoadingOverlay from "react-loading-overlay";
@@ -40,16 +37,8 @@ import FadeLoader from "react-spinners/FadeLoader";
 
 import Header from "components/Headers/Header.js";
 
-let user =1;
-let loggedin_data = false;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
-}
+let user = localStorage.getItem('access_token')
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 
 function ChangePassword (){
@@ -57,44 +46,34 @@ function ChangePassword (){
     const [old_password, setPassword] = React.useState("");
     const [new_password, setNewPassword] = React.useState("");
     const [confirmPassword, setComfirmPassword] = React.useState("");
-    const [alert, setAlert] = React.useState(false);
     const [message, setMessage] = React.useState("");
-    const [isActive, setIsActive] = React.useState(false);
-    const [error, setError]= React.useState(false);
+    const [modal, setModal] = React.useState(false)
 
     const handleSubmit=(e)=>{
         e.preventDefault();
         console.log(e);
-        setIsActive(true);
         if(confirmPassword !== new_password){
             setMessage("Passwords do not match");
-            setAlert(true);
-            setIsActive(false);
-            setError(true);
+            setModal(true)
         }
         else{
-        axios.post("https://admin-kokrokooad.herokuapp.com/api/admin/change-password",
+        axios.post(`${domain}/api/admin/change-password`,
         {new_password,old_password},
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
             if(res.data.status === "invalid password"){
                 setMessage(res.data.status);
-                setAlert(true);
-                setIsActive(false);
-                setError(true);
+                setModal(true);
             }
             else if(res.data.status === "updated"){
                 setMessage(res.data.status);
-                setAlert(true);
-                setIsActive(false);
-                setError(false)
+                setModal(true);
                 
             }
         })
         .catch(error=>{
             console.log(error);
-            setIsActive(false);
             
         })
         }
@@ -102,30 +81,18 @@ function ChangePassword (){
 
     return (
       <>
-      <LoadingOverlay 
-      active = {isActive}
-      spinner={<FadeLoader color={'#4071e1'}/>}
-      >
         <Header />
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-            <Col className="mb-5 mb-xl-0" xl="10" lg="10">
+            <Col className="mr-auto ml-auto" md="6" sm="12" xs="12" xl="6" lg="6">
               <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
-                  <CardHeader>
+                  <CardHeader style={{fontSize:"14px", fontWeight:600}}>
                       CHANGE PASSWORD
                   </CardHeader>    
                   <CardBody>
-                     <Form role="form" onSubmit={handleSubmit}>
-                     {alert?
-                        <Alert color={error?"warning":"success"} fade={true} style={{textAlign:"center",height:"50px"}}>
-                        {message}
-                        </Alert>
-                        :
-                        <div>
-                        </div>
-                    }
-                     <Label>Old Password</Label>    
+                     <Form  onSubmit={handleSubmit}>
+                     <Label style={{fontSize:"13px",fontWeight:600}}>Old Password</Label>    
                      <InputGroup>
                     <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -135,7 +102,7 @@ function ChangePassword (){
                   <Input placeholder="Old Password" type="password" name="password" value={old_password} onChange={e=>setPassword(e.target.value)} required/>
                     </InputGroup>
                     <br/>
-                     <Label>New Password</Label> 
+                     <Label style={{fontSize:"13px",fontWeight:600}}>New Password</Label> 
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -145,7 +112,7 @@ function ChangePassword (){
                   <Input placeholder="New Password" type="password" name="npassword" value={new_password} onChange={e=>setNewPassword(e.target.value)} required/>
                 </InputGroup>
                 <br/>
-                <Label>Confirm Password</Label> 
+                <Label style={{fontSize:"13px",fontWeight:600}}>Confirm Password</Label> 
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -171,7 +138,16 @@ function ChangePassword (){
             </Col>
           </Row>
         </Container>
-        </LoadingOverlay>
+        <Modal isOpen={modal}>
+          <ModalHeader style={{color:"black"}}>
+          {message}
+          </ModalHeader>
+          <ModalFooter>
+          <Button color="danger" onClick={()=>setModal(false)}>
+            close
+          </Button>
+          </ModalFooter>
+          </Modal>
       </>
     );
   }

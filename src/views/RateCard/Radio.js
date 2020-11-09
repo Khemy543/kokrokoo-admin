@@ -22,14 +22,8 @@ import Header from "components/Headers/Header.js";
 import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 
-let user =null;
-let loggedin_data = false;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-  console.log("user:",user);
-}
+let user = localStorage.getItem('access_token')
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 class Radio extends React.Component {
     state={
@@ -39,7 +33,7 @@ class Radio extends React.Component {
 
     componentDidMount(){
         this.setState({isActive:true})
-            axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/get-media/2/companies",
+            axios.get(`${domain}/api/admin/get-media/2/companies`,
             {headers:{ 'Authorization':`Bearer ${user}`}})
             .then(res=>{
               console.log(res.data);

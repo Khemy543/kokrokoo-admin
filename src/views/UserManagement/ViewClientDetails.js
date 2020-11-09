@@ -1,7 +1,5 @@
 
 import React from "react";
-// node.js library that concatenates classes (strings)
-import classnames from "classnames";
 import axios from "axios";
 // reactstrap components
 import {
@@ -9,11 +7,6 @@ import {
   Card,
   CardHeader,
   CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col,Spinner
@@ -23,7 +16,7 @@ import Header from "components/Headers/Header.js";
 let user = localStorage.getItem('access_token')
 var domain = "https://admin.test.backend.kokrokooad.com"
 
-class ViewMediaCompany extends React.Component {
+class ViewClientDetails extends React.Component {
     state={
         details:[],
         company:[],
@@ -33,19 +26,18 @@ class ViewMediaCompany extends React.Component {
 
     componentDidMount(){
         this.setState({isActive:true})
-            axios.get(`${domain}/api/admin/user/${this.props.location.state.id}/view`,
+            axios.get(`${domain}/api/admin/client/${this.props.location.state.id}/view`,
             {headers:{ 'Authorization':`Bearer ${user}`}})
             .then(res=>{
               console.log(res.data);
-              this.setState({details:res.data.data.user, role:res.data.data.user.role, company:res.data.data.company, isActive:false});
+              this.setState({details:res.data.data.user, company:res.data.data.company,role:res.data.data.user.role, isActive:false});
             })
             .catch(error=>{
-              console.log(error);
+              console.log(error.response.data);
             })
     }
  
   render() {
-      
     return (
       <>
         <Header />
@@ -59,8 +51,8 @@ class ViewMediaCompany extends React.Component {
           </Row>
           :
           <Row>
-            <Col  xl="10" lg="10">
-            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+            <Col xl="10" lg="10">
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
                   <CardHeader>
                       <h3 style={{fontWeight:600, fontSize:"14px"}}>User Information</h3>
                   </CardHeader>  
@@ -112,17 +104,21 @@ class ViewMediaCompany extends React.Component {
                                 <Col>
                                 <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Last Login</label>
                                 {this.state.details.last_login === null?
-                                <h3 style={{fontSize:"14px", fontWeight:600}}>User Not Logged In Yet</h3>
-                                :
-                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.details.last_login}</h3>
+                                  <h3 style={{fontSize:"14px", fontWeight:600}}>User Not Logged In Yet</h3>
+                                  :
+                                  <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.details.last_login}</h3>
                                 }
+                                
                                 </Col>
                             </Row>
                           </Col>
                       </Row>
                   </CardBody>
               </Card> 
-              <br/>  
+              <br/>
+              {this.state.company === undefined?
+              <div></div>
+              :
               <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
                   <CardHeader>
                       <h3 style={{fontWeight:600, fontSize:"14px"}}>Company Information</h3>
@@ -136,16 +132,11 @@ class ViewMediaCompany extends React.Component {
                                 <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.company_name}</h3>
                                 </Col>
                                 <Col>
-                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Media House</label>
-                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.media_house}</h3>
+                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Company Email</label>
+                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.company_email}</h3>
                                 </Col>
                                 <Col>
-                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>isPublished</label>
-                                {this.state.company.isPublished===1?
-                                <h3 style={{fontSize:"14px", fontWeight:600}}>True</h3>
-                                :
-                                <h3 style={{fontSize:"14px", fontWeight:600}}>False</h3>
-                                }
+
                                 </Col>
                             </Row>
                             <br/>
@@ -155,8 +146,8 @@ class ViewMediaCompany extends React.Component {
                                 <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.address}</h3>
                                 </Col>
                                 <Col>
-                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Media Type</label>
-                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.media_type}</h3>
+                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Coutry</label>
+                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.country}</h3>
                                 </Col>
                                 <Col>
                                 <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Website</label>
@@ -166,21 +157,14 @@ class ViewMediaCompany extends React.Component {
                             <br/>
                             <Row>
                             <Col>
-                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Purpose</label>
-                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.purpose}</h3>
+                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Industry Type</label>
+                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.industry_type}</h3>
                                 </Col>
                                 <Col>
                                 <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Business Cert</label><br/>
-                                <a target="_blank" href={`https://uploads.kokrokooad.com/${this.state.company.business_cert}`}><Button color="info"><i className="fa fa-file-text"/> Open File</Button></a>
+                                <a target="blank" href={`https://uploads.kokrokooad.com/${this.state.company.business_cert}`}><Button color="info"><i className="fa fa-file-text"/> Open File</Button></a>
                                 </Col>
                                 <Col>
-                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Operation Cert</label><br/>
-                                <a target="_blank" href={`https://uploads.kokrokooad.com/${this.state.company.operation_cert}`}><Button color="info"><i className="fa fa-file-text"/> Open File</Button></a>
-                                </Col>
-                            </Row>
-                            <br/>
-                            <Row>
-                               <Col>
                                 <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Company Logo</label>
                                 <br/>
                                 <img
@@ -194,7 +178,8 @@ class ViewMediaCompany extends React.Component {
                           </Col>
                       </Row>
                   </CardBody>
-              </Card> 
+              </Card>    
+              }
             </Col>
           </Row>
         }
@@ -204,4 +189,4 @@ class ViewMediaCompany extends React.Component {
   }
 }
 
-export default ViewMediaCompany;
+export default ViewClientDetails;

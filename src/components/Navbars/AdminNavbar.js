@@ -37,13 +37,8 @@ import {
 } from "reactstrap";
 import { RateConsumer } from "../../context.js";
 
-
-let user =1;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem('access_token')
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 class AdminNavbar extends React.Component {
 state={
@@ -51,7 +46,7 @@ state={
   }
 
 componentDidMount(){
-  axios.get("https://admin-kokrokooad.herokuapp.com/api/admin",{
+  axios.get(`${domain}/api/admin`,{
     headers:{ 'Authorization':`Bearer ${user}`}
         }
         )
@@ -70,7 +65,7 @@ componentDidMount(){
   render() {
     return (
       <>
-        <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
+        <Navbar className="navbar-top navbar-dark shadow" expand="md" id="navbar-main">
           <Container fluid>
             <div
               className="h4 mb-0 text-uppercase d-none d-lg-inline-block"
@@ -78,7 +73,7 @@ componentDidMount(){
             >
               {this.props.brandText}
             </div>
-            <Form className="navbar-search navbar form-inline mr-3 d-none d-md-flex ml-lg-auto" style={{color:"rgba(50, 50, 93, 0.62)"}}>
+          {/*   <Form className="navbar-search navbar form-inline mr-3 d-none d-md-flex ml-lg-auto" style={{color:"rgba(50, 50, 93, 0.62)"}}>
               <FormGroup className="mb-0" style={{color:"rgba(50, 50, 93, 0.62)"}}>
                 <InputGroup className="input-group-alternative" style={{color:"rgba(50, 50, 93, 0.62)"}}>
                   <InputGroupAddon addonType="prepend" style={{color:"rgba(50, 50, 93, 0.62)"}}>
@@ -89,19 +84,19 @@ componentDidMount(){
                   <Input placeholder="Search" type="text" style={{color:"rgba(50, 50, 93, 0.62)"}}/>
                 </InputGroup>
               </FormGroup>
-            </Form>
+            </Form> */}
             <RateConsumer>
               {value=>(
             <Nav className="align-items-center d-none d-md-flex" navbar>
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">
-                    <span className="avatar avatar-sm rounded-circle">
+                   {/*  <span className="avatar avatar-sm rounded-circle">
                       <img
                         alt="..."
                         src={require("assets/img/theme/team-4-800x800.jpg")}
                       />
-                    </span>
+                    </span> */}
                     <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold" style={{color:"#32325d"}}>
                         {this.state.username}

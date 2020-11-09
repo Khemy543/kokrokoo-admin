@@ -23,3 +23,9 @@
   position: relative;
   width: auto;
 }
+
+.transparent-button{
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}

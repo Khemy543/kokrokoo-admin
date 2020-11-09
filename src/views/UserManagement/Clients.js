@@ -19,8 +19,6 @@ import React from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 import axios from "axios";
-import LoadingOverlay from "react-loading-overlay";
-import FadeLoader from "react-spinners/FadeLoader";
 // reactstrap components
 import {
   Button,
@@ -30,25 +28,19 @@ import {
   NavItem,
   NavLink,
   Nav,
-  Progress,
   Table,
   Container,
   Row,
   Col,  TabContent,
-  TabPane, CardFooter
+  TabPane, CardFooter,Spinner, Modal, ModalHeader,ModalFooter
 } from "reactstrap";
 import Pagination from "react-js-pagination";
 
 
 import Header from "components/Headers/Header.js";
-import { RateConsumer } from "../../context.js";
 
-let user= null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-if(all_data !== null){
-  user = all_data[0];
-}
-
+let user = localStorage.getItem('access_token')
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 class Clients extends React.Component {
 
@@ -58,7 +50,10 @@ class Clients extends React.Component {
     data:[],
     meta:[],
     isActive:false,
-    client:[]
+    client:[],
+    modal:false,
+    alertmessage:"",
+    deleteModal:false,
   }
 
   toggle = tab => {
@@ -67,107 +62,140 @@ class Clients extends React.Component {
     componentDidMount(){
        
       this.getUsers()
-
-        this.setState({isActive:true})
-        axios.get("https://admin-kokrokooad.herokuapp.com/api/admin/fetch-new-registered-accounts",
+        axios.get(`${domain}/api/admin/fetch-new-registered-client-accounts`,
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
             this.setState(()=>{
-                return{client:res.data.clients,isActive:false};
+                return{client:res.data.data};
             });
         })
         .catch(error=>{
             console.log(error);
-            this.setState({isActive:false})
         })
     }
  
     getUsers(pageNumber=1){
       this.setState({isActive:true})
-    axios.get("http://admin-kokrokooad.herokuapp.com/api/admin/get-activated-clients?page="+pageNumber+"",
+    axios.get(`${domain}/api/admin/get-activated-client?page=${pageNumber}`,
     {headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
         console.log(res.data)
-        this.setState({data:res.data.data, meta:res.data.meta,isActive:false})
+        this.setState({data:res.data.data, meta:res.data.meta, isActive:false})
     })
     .catch(error=>{
+      console.log(error)
     });
   }
 
+
+  // activate account
+  activateAccount=(id)=>{
+    let tempClient = this.state.client;
+    let tempData = this.state.data;
+    axios.post(`${domain}/api/admin/activate-client/${id}/account`,null,
+    {headers:{ 'Authorization':`Bearer ${user}`}})
+    .then(res=>{
+      console.log(res.data)
+      let selected = tempClient.find(item=>item.id === id);
+      selected.isActive = "active";
+      selected.id = tempData.length + 1;
+      tempData.push(selected);
+      console.log(tempData)
+      let newData = tempClient.filter(item => item.id !== id);
+      this.setState({client:newData, data:tempData, modal:true, alertmessage:"Account Activated!"})
+
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+  }
   //block client
   blockClient=(id)=>{
-      this.setState({isActive:true})
-      axios.post("http://admin-kokrokooad.herokuapp.com/api/admin/block/"+id+"/client-account",null,
+    let tempData = this.state.data;
+      axios.post(`${domain}/api/admin/block/${id}/client-account`,null,
       {headers:{ 'Authorization':`Bearer ${user}`}})
       .then(res=>{
           console.log(res.data);
-          if(res.data.status === "blocked"){
-            window.location.reload("/")
-            this.setState({isActive:false})
-        }
-      })
-      .catch(error=>{
-          console.log(error.response.data);
-      })
-  }
-
-  unBlockClient=(id)=>{
-      this.setState({isActive:true})
-      axios.post("http://admin-kokrokooad.herokuapp.com/api/admin/unblock/"+id+"/client-account",null,
-      {headers:{ 'Authorization':`Bearer ${user}`}})
-      .then(res=>{
-          console.log(res.data);
-          if(res.data.status === "unblocked"){
-            window.location.reload("/")
-            this.setState({isActive:false})
-        }
+          let selected = tempData.find(item=>item.id === id);
+          selected.isActive = "inactive"
+          this.setState({data:tempData, modal:true,alertmessage:"Account Blocked!"})
       })
       .catch(error=>{
           console.log(error);
       })
   }
 
-  handleView=(account_type, id)=>{
-      if(account_type === "company"){
-          this.props.history.push("/admin/company-details",{id:id})
-      }
-      else{
-          
-      }
+  unBlockClient=(id)=>{
+    let tempData = this.state.data;
+      axios.post(`${domain}/api/admin/unblock/${id}/client-account`,null,
+      {headers:{ 'Authorization':`Bearer ${user}`}})
+      .then(res=>{
+          console.log(res.data);
+          let selected = tempData.find(item=>item.id === id);
+          selected.isActive = "active"
+          this.setState({data:tempData, modal:true, alertmessage:"Account Unblocked!"})
+      })
+      .catch(error=>{
+          console.log(error);
+      })
   }
+
+  handleView=( id)=>{
+          this.props.history.push("/admin/client-details",{id:id})
+      
+  }
+
+  //handleReject
+handleReject=(id)=>{
+  let tempData = this.state.client;
+  axios.post(`${domain}/api/admin/reject/${id}/client-account`,null,
+  {headers:{ 'Authorization':`Bearer ${user}`}})
+  .then(res=>{
+    console.log(res.data);
+    let newData = tempData.filter(item=>item.id !== id)
+    this.setState({client:newData, modal:true, alertmessage:"Accounut Rejected"})
+  })
+  .catch(error=>{
+    console.log(error)
+  })
+}
 
 
   render() {
     return (
       <>
-      <LoadingOverlay 
-      active = {this.state.isActive}
-      spinner={<FadeLoader color={'#4071e1'}/>}
-      >
         <Header />
         
         {/* Page content */}
         <Container className="mt--8" fluid>
+        {this.state.isActive?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
           <div className="nav-tabs-navigation">
             <div className="nav-tabs-wrapper">
             <Nav role="tablist" tabs>
                 <NavItem>
                 <NavLink
-                style={{cursor:"pointer"}}
+                style={{cursor:"pointer", fontWeight:600, fontSize:"13px"}}
                     className={classnames({ active: this.state.activeTab === "1" })} 
                     onClick={() => { this.toggle("1"); console.log("1") }}
                 >
-                USER ACTIVITIES
+                CLIENT ACTIVITIES
                 </NavLink>
                 </NavItem>
                 <NavItem>
                 <NavLink
-                style={{cursor:"pointer"}}
+                style={{cursor:"pointer", fontWeight:600, fontSize:"13px"}}
                     className={classnames({ active: this.state.activeTab === "2" })}
                     onClick={() => { this.toggle("2"); }}
                 >
-                NEW USERS
+                NEW CLIENTS
                 </NavLink>
                 </NavItem>
             </Nav>
@@ -181,7 +209,7 @@ class Clients extends React.Component {
                   <Col className="mb-5 mb-xl-0" xl="12" lg="12">
                     <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
                     <CardHeader>
-                    NEW USERS
+                    <h3 style={{fontSize:"13px", fontWeight:600}}>NEW CLIENTS</h3>
                     </CardHeader>
                         <CardBody style={{overflowX:"scroll"}}>
                         <Table bordered>
@@ -189,40 +217,34 @@ class Clients extends React.Component {
                               <tr>
                               <th>#</th>
                               <th>ID</th>
+                              <th>Name</th>
                               <th>Email</th>
                               <th>Phone</th>
-                              <th>Account</th>
-                              <th>Industry</th>
-                              <th>Company</th>
-                              <th>Title</th>
-                              <th>Status</th>
-                              <th>Last Login</th>
-                              <th>Created</th>
-                              <th>Updated</th>
+                              <th>Company Name</th>
+                              <th>Created At</th>
                               <th>Action</th>
                               </tr>
                           </thead>
                           <tbody>
                             {this.state.client.map((value,index)=>(
                                   <tr>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
+                                  <th>{index+1}</th>
+                                  <th>{value.id}</th>
+                                  <th>{value.name}</th>
+                                  <th>{value.email}</th>
+                                  <th>{value.phone1}</th>
+                                  {value.company === null?
+                                  <th>None</th>
+                                  :
+                                  <th>{value.company.name}</th>
+                                  }
+                                  <th>{value.created_at.date} {value.created_at.time}</th>
                                   <th>
                                       <Col className="ml-auto mr-auto">
-                                      <Row><Button color="success" style={{padding:'0px 4px 0px 4px', marginBottom:"3px" }}><i className="fa fa-unlock"/></Button></Row>
-                                      <Row><Button color="danger" style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}}><i className="fa fa-lock"/></Button></Row>
-                                      <Row><Button color="info" style={{padding:'0px 4px 0px 4px'}}><i className="fa fa-check-square-o"/></Button></Row>
-                                      </Col>
+                                      <Row><Button id="unblock" color="success" style={{padding:'0px 6px 0px 6px', marginBottom:"3px" }} onClick={()=>this.activateAccount(value.id)}><i className="fa fa-unlock"/></Button></Row>
+                                      <Row><Button  color="info"  style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.handleView(value.id)}><i className="fa fa-eye"/></Button></Row>
+                                      <Row><Button color="danger" style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.setState({id:value.id, deleteModal:true})}><i className="fa fa-close"/></Button></Row>
+                               </Col>
                                   </th>
                               </tr>
                             ))}
@@ -241,21 +263,19 @@ class Clients extends React.Component {
                    <Col className="mb-5 mb-xl-0" xl="12" lg="12">
             <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
                 <CardHeader>
-                    USER ACTIVITIES
+                <h3 style={{fontSize:"13px", fontWeight:600}}>CLIENT ACTIVITIES</h3>
                     </CardHeader>
                   <CardBody style={{overflowX:"scroll"}}>
                    <Table bordered>
                    <thead style={{backgroundColor:"#01a9ac",color:"black"}}>
                         <tr>
                         <th>#</th>
-                        <th>name</th>
-                        <th>Title</th>
-                        <th>Company</th>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Account Type</th>
-                        <th>Status</th>
+                        <th>Company Name</th>
                         <th>Created At</th>
+                        <th>Status</th>
                         <th>Last Login</th>
                         <th>Action</th>
                         </tr>
@@ -263,22 +283,24 @@ class Clients extends React.Component {
                     <tbody>
                         {this.state.data.map((value, index)=>(
                         <tr key={index}>
-                            <th>{value.id}</th>
+                        <th>{index+1}</th>
                             <th>{value.name}</th>
-                            <th>{value.title}</th>
-                            <th>{value.company}</th>
                             <th>{value.email}</th>
-                            <th>{value.phone}</th>
-                            <th>{value.account_type}</th>
-                            <th>{value.status}</th>
-                            <th>{value.created_at.date}<br/>{value.created_at.time}</th>
-                            <th>{value.last_login}</th>
+                            <th>{value.phone1}</th>
+                            {value.company === null?
+                                  <th>None</th>
+                                  :
+                                  <th>{value.company.name}</th>
+                                  }
+                            <th>{value.created_at.date} {value.created_at.time}</th>
+                            <th>{value.isActive}</th>
+                                  <th>{value.last_login}</th>
                             <th>
                                 <Col className="ml-auto mr-auto">
-                                <Row><Button  color="info"  style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.handleView(value.account_type, value.id)}><i id="view" className="fa fa-eye"/></Button></Row>
+                                <Row><Button  color="info"  style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.handleView(value.id)}><i id="view" className="fa fa-eye"/></Button></Row>
                                
                                 <Row>
-                                {value.status !== "active"?
+                                {value.isActive !== "active"?
                                 <Button id="unblock" color="success" style={{padding:'0px 6px 0px 6px', marginBottom:"3px" }} onClick={()=>this.unBlockClient(value.id)}><i className="fa fa-unlock"/></Button>
                                 :
                                 <Button id="block" color="danger" style={{padding:'0px 7px 0px 7px'}} onClick={()=>this.blockClient(value.id)}><i className="fa fa-lock"/></Button>
@@ -314,8 +336,33 @@ class Clients extends React.Component {
                     </Container>
                     </TabPane> 
                   </TabContent>
+        </>
+        }
+        <Modal isOpen={this.state.modal}>
+          <ModalHeader style={{color:"black"}}>
+          {this.state.alertmessage}
+          </ModalHeader>
+          <ModalFooter>
+          <Button color="danger" onClick={()=>this.setState({modal:false})}>
+            close
+          </Button>
+          </ModalFooter>
+          </Modal>
+
+          <Modal isOpen={this.state.deleteModal}>
+          <ModalHeader style={{color:"black"}}>
+          Reject Account?
+          </ModalHeader>
+          <ModalFooter>
+          <Button color="danger" onClick={()=>{this.handleReject(this.state.id); this.setState({deleteModal:false})}}>
+            Yes
+          </Button>
+          <Button color="info" onClick={()=>this.setState({deleteModal:false})}>
+            No
+          </Button>
+          </ModalFooter>
+          </Modal>
         </Container>
-        </LoadingOverlay>
       </>
     );
   }

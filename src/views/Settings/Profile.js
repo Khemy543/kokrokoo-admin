@@ -28,25 +28,15 @@ import {
   Input,
   Container,
   Row,
-  Col
+  Col,Spinner,Modal, ModalHeader, ModalFooter
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import axios from "axios";
-import LoadingOverlay from "react-loading-overlay";
-import FadeLoader from "react-spinners/FadeLoader";
+import Header from "components/Headers/Header";
 
-let user =1;
-let loggedin_data = false;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
-}
-
+let user = localStorage.getItem('access_token')
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 class Profile extends React.Component {
 
@@ -57,12 +47,13 @@ class Profile extends React.Component {
     role:"",
     title:"", 
     id:"",
-    isActive:false
+    isActive:false,
+    modal:false
   }
 
 componentDidMount(){
   this.setState({isActive:true})
-  axios.get("https://admin-kokrokooad.herokuapp.com/api/admin",{
+  axios.get(`${domain}/api/admin`,{
     headers:{ 'Authorization':`Bearer ${user}`}
         }
         )
@@ -76,7 +67,8 @@ componentDidMount(){
             title:res.data.title,
             id:res.data.id,
             role:res.data.role,
-            isActive:false
+            isActive:false,
+            alertmessage:""
           })
         }
 
@@ -89,29 +81,33 @@ componentDidMount(){
 handleSubmit=(e)=>{
   e.preventDefault();
   console.log(e);
-  this.setState({isActive:true})
   console.log(this.state.id)
-  axios.post("https://admin-kokrokooad.herokuapp.com/api/admin/update-profile",{ _method:"PATCH",
+  axios.post(`${domain}/api/admin/update-profile`,{ _method:"PATCH",
   name:this.state.username, email:this.state.email,phone:this.state.phone,title:this.state.title,role:this.state.role},{
     headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
-    console.log(res.data)
+    console.log(res.data);
+    this.setState({modal:true, alertmessage:"Details Updated!"})
   })
   .catch(error=>{
-    console.log(error.response.data)
+    console.log(error)
   })
 }
 
   render() {
     return (
       <>
-      <LoadingOverlay 
-      active = {this.state.isActive}
-      spinner={<FadeLoader color={'#4071e1'}/>}
-      >
-        <UserHeader userName={this.state.username}/>
+      <Header />
         {/* Page content */}
         <Container className="mt--7" fluid>
+        {this.state.isActive?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
           <Row>
             <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
               <Card className="card-profile shadow">
@@ -214,7 +210,7 @@ handleSubmit=(e)=>{
                               className="form-control-alternative"
                               value={this.state.phone}
                               id="input-first-name"
-                              placeholder="First name"
+                              placeholder="Phone"
                               type="text"
                               onChange={e=>this.setState({phone:e.target.value})}
                             />
@@ -231,11 +227,10 @@ handleSubmit=(e)=>{
                             <Input
                               className="form-control-alternative"
                               value={this.state.role}
-                              id="input-last-name"
-                              placeholder="Last name"
-                              type="text"
+                              type="select"
                               onChange={e=>this.setState({role:e.target.value})}
-                            />
+                            >
+                            </Input>
                           </FormGroup>
                         </Col>
                       </Row>
@@ -273,8 +268,19 @@ handleSubmit=(e)=>{
               </Card>
             </Col>
           </Row>
+          </>
+        }
+        <Modal isOpen={this.state.modal}>
+          <ModalHeader style={{color:"black"}}>
+          {this.state.alertmessage}
+          </ModalHeader>
+          <ModalFooter>
+          <Button color="danger" onClick={()=>this.setState({modal:false})}>
+            close
+          </Button>
+          </ModalFooter>
+          </Modal>
         </Container>
-        </LoadingOverlay>
       </>
     );
   }

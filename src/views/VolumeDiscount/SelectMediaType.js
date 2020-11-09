@@ -1,23 +1,4 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-// react component that copies the given text inside your clipboard
-import { CopyToClipboard } from "react-copy-to-clipboard";
 // reactstrap components
 import {
   Card,
@@ -26,54 +7,59 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledTooltip,
   Input,
-  Button
+  Button,
+  Spinner
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
-import LoadingOverlay from "react-loading-overlay";
-import BounceLoader from "react-spinners/BounceLoader";
 import axios from "axios";
 
-function CreateSubscription({history}){
+var domain = "https://backend.demo.kokrokooad.com";
+function SelectMediaType({history}){
 
 const [media_types, setMedia_types] = React.useState([]);
 const [media_id , setMedia_id] = React.useState(1);
-const [isActive , setIsActive] = React.useState(false);
-
 React.useEffect(()=>{
-  setIsActive(true)
-      axios.get("https://kokrokooad.herokuapp.com/api/media-types")
+      axios.get(`${domain}/api/media-types`)
       .then(res=>{
           console.log(res.data);
           const media_types = res.data;
           setMedia_types(media_types);
-          setIsActive(false)
-      });
+      })
+      .catch(error=>{
+        console.log(error.response.data)
+        if(!error.response){
+          alert("check your internet connection");
+        }
+      })
   },[])
 
   const pass_id=()=>{
-    const meida_id = media_id;
-    localStorage.setItem('media_id',media_id);
-    history.push("/client/published-companies-create");
+    history.push("/admin/select-mediahouse",{id:media_id});
   }
 
     return (
       <>
-      <LoadingOverlay 
-      active = {isActive}
-      spinner={<BounceLoader color={'#4071e1'}/>}
-      >
         <Header />
         {/* Page content */}
         <Container className=" mt--7" fluid>
           {/* Table */}
+          {media_types.length<=0?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
           <Row>
             <div className=" col">
-              <Card className=" shadow">
+            <p
+            style={{fontSize:"13px", fontWeight:500}}
+            >What Type Of Rate Card Do You Want To <span style={{color:"red"}}>View</span>, Select A Media Type.</p>
+              <Card className=" shadow" style={{marginTop:"20px"}}>
                 <CardHeader className=" bg-transparent">
-                  <h3 className=" mb-0">SELECT MEDIA TYPES</h3>
+                  <h3 className=" mb-0">SELECT MEDIA TYPE</h3>
                 </CardHeader>
                 <CardBody>
                   <Row className=" icon-examples">
@@ -96,12 +82,12 @@ React.useEffect(()=>{
                 </CardBody>
               </Card>
             </div>
-          </Row>
+          </Row>}
+         
         </Container>
-        </LoadingOverlay>
       </>
     );
   }
 
 
-export default CreateSubscription;
+export default SelectMediaType;

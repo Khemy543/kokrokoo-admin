@@ -6,19 +6,13 @@ import FadeLoader from "react-spinners/FadeLoader";
 
 const RateContext = React.createContext();
 
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem('access_token')
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 class RateProvider extends React.Component{
 
     state={
         isActive:false,
-        clients:[],
-        media:[]
     }
 
 
@@ -46,7 +40,7 @@ class RateProvider extends React.Component{
     
 
 
-    blockMedia=()=>{
+    /* blockMedia=()=>{
         axios.post("",
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
@@ -68,12 +62,11 @@ class RateProvider extends React.Component{
         .catch(error=>{
             console.log(error);
         })
-    }
+    } */
 
     //logout
     logout=()=>{
-        this.setState({isActive:true});
-        axios.post("https://admin-kokrokooad.herokuapp.com/api/admin/logout",null,
+        axios.post(`${domain}/api/admin/logout`,null,
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
@@ -92,8 +85,6 @@ class RateProvider extends React.Component{
         return(
             <RateContext.Provider value={{
                 ...this.state,
-                blockMedia:this.blockMedia,
-                unBlockMedia:this.unBlockMedia,
                 logout:this.logout
             }}>
             <LoadingOverlay 
