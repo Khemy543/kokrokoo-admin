@@ -22,7 +22,7 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 
 let user = localStorage.getItem('access_token')
-var domain = "https://admin.test.backend.kokrokooad.com"
+var domain = "https://admin-backend.kokrokooad.com"
 class Print extends React.Component {
     state={
         isActive:false,
