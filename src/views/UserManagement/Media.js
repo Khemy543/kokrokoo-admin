@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
@@ -41,7 +24,7 @@ import Header from "components/Headers/Header.js";
 
 let user = localStorage.getItem('access_token');
 
-var domain = "https://admin-backend.kokrokooad.com";
+var domain = "https://admin.test.backend.kokrokooad.com";
 
 class Media extends React.Component {
 
@@ -77,6 +60,31 @@ class Media extends React.Component {
 
   toggle = tab => {
     if(this.state.activeTab !== tab) this.setState({activeTab:tab});
+  }
+
+  togglePublish=(id,isPublished)=>{
+    let tempData = [...this.state.data];
+    let url = `${domain}/api/admin/publish/${id}/media-company`;
+    if(isPublished == 1){
+      url = `${domain}/api/admin/unpublish/${id}/media-company`
+    }
+    axios.post(url, null,
+      {headers:{ 'Authorization':`Bearer ${user}`}})
+    .then(response=>{
+      let selected = tempData.find(item=>item.company && item.company.id == id);
+      console.log(selected)
+      if(isPublished == 1){
+        selected.company.isPublished = 0;
+      }
+      else{
+        selected.company.isPublished = 1;
+      }
+      this.setState({data:tempData})
+      
+    })
+    .catch(error=>{
+
+    })
   }
 
   toggle1=()=>this.setState({tool1:!this.state.tool1})
@@ -290,6 +298,7 @@ handleReject=(id)=>{
                         <th>Status</th>
                         <th>Last Login</th>
                         <th>Action</th>
+                        <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -317,7 +326,14 @@ handleReject=(id)=>{
                                 }
                                 </Col>
                             </th>
+                            <th>
+                            <label class="switch">
+                              <input type="checkbox" checked={value.company && value.company.isPublished == 1} onChange={e=>this.togglePublish(value.company && value.company.id,value.company && value.company.isPublished)}/>
+                              <span class="slider round"></span>
+                            </label>
+                            </th>
                         </tr>
+                        
                     ))}
                     </tbody>
                   

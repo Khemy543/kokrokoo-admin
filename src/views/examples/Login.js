@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
@@ -36,7 +19,7 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import AuthNavbar from "../../components/Navbars/AuthNavbar.js"
 
-var domain = "https://admin-backend.kokrokooad.com"
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 function Login({history}){
   const [username, setUsername] = React.useState("");
@@ -54,7 +37,7 @@ function Login({history}){
     axios.post(`${domain}/oauth/token`,{
       grant_type: "password",
       client_id: 1, 
-      client_secret:"wMLCpjqZs0rZnYESOeTSpWi6r58abMuQxWyEq3PM",
+      client_secret:"UhJpDIR5od53fmjQntzxk4QvlSfni8yrK6exIk1z",
       username: username,
       password: password,
       provider: "admins",
