@@ -195,6 +195,42 @@ class ViewMediaCompany extends React.Component {
                       </Row>
                   </CardBody>
               </Card> 
+              <br/>  
+              {this.state.company.hasBankDetails?
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+                  <CardHeader>
+                      <h3 style={{fontWeight:600, fontSize:"14px"}}>Bank Information</h3>
+                  </CardHeader>  
+                  <CardBody>
+                      <Row>
+                          <Col md="12">
+                            <Row>
+                                <Col>
+                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Bank Name</label>
+                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.bank_details?.bank_name}</h3>
+                                </Col>
+                                <Col>
+                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Bank Branch</label>
+                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.bank_details?.bank_branch}</h3>
+                                </Col>
+                                <Col>
+                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Account Name</label>
+                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.bank_details?.account_name}</h3>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <Row>
+                                <Col>
+                                <label style={{fontSize:"10px", fontWeight:600, textTransform:"uppercase"}}>Account Number</label>
+                                <h3 style={{fontSize:"14px", fontWeight:600}}>{this.state.company.bank_details?.account_number}</h3>
+                                </Col>
+                            </Row>
+                          </Col>
+                      </Row>
+                  </CardBody>
+              </Card> 
+              :
+              null}
             </Col>
           </Row>
         }

@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import Index from "views/Index.js";
 import Media from "views/UserManagement/Media.js";
 import Clients from "views/UserManagement/Clients.js";
@@ -22,9 +5,6 @@ import Profile from "views/Settings/Profile.js";
 import ChangePassword from "views/Settings/ChangePassword.js";
 import Login from "views/examples/Login.js";
 import ViewMediaCompany from "views/UserManagement/ViewMediaCompany.js";
-import TV from "views/RateCard/TV.js";
-import Radio from "views/RateCard/Radio.js";
-import Print from "views/RateCard/Print.js";
 import Subscriptions from "views/Subscriptions/Subscriptions";
 import ViewClientDetails from "views/UserManagement/ViewClientDetails";
 import RegistrationAmount from "views/Transactions/RegistrationAmount";
@@ -40,7 +20,22 @@ import RejectedPo from "views/PO/RejectedPo";
 import ViewPendingPo from "views/PO/ViewPendingPo";
 import ViewApprovedPos from "views/PO/ViewApprovedPos";
 import ViewRejectePos from "views/PO/ViewRejectedPos";
-
+import CRateSelectMediaType from "views/RateCard/CreateRateCards/SelectMediaType";
+import CRateSelectMediaHouse from 'views/RateCard/CreateRateCards/SelectMediaHouse.js'
+import CreateRateCardTitle from "views/RateCard/CreateRateCards/RateCardTitle";
+import VRateSelectMediaType from "views/RateCard/ViewRateCards/SelectMediaType";
+import VRateSelectMediaHouse from "views/RateCard/ViewRateCards/SelectMediaHouse";
+import RateCardDetails from "views/RateCard/CreateRateCards/RateCardDetails";
+import VideoPreview from "views/RateCard/CreateRateCards/VideoPreview";
+import PrintRateDetails from "views/RateCard/CreateRateCards/PrintRateCardDetails";
+import PrintPreview from "views/RateCard/CreateRateCards/PrintPreview";
+import ERateSelectMediaType from "views/RateCard/CreateFrom Existing/SelectMediaType";
+import ERateSelectMediaHouse from 'views/RateCard/CreateFrom Existing/SelectMediaHouse.js';
+import ESelectRateCard from "views/RateCard/CreateFrom Existing/SelectRateCard";
+import CreateExistingTitle from "views/RateCard/CreateFrom Existing/RateCardTitle";
+import VSelectRateCard from "views/RateCard/ViewRateCards/SelectRateCard";
+import ViewRateCardPrint from "views/RateCard/ViewRateCards/ViewRateCardPrint";
+import ViewRateCardVideo from "views/RateCard/ViewRateCards/ViewRateCardVideo";
 
 var routes = [
   {
@@ -89,27 +84,134 @@ var routes = [
     layout: "/admin"
   },
   {
-    
-    path: "/tv-media-companies",
-    name: "TV",
+    path: "/view-ratecard",
+    name: "View Ratecard",
     header:"rate",
-    component: TV,
+    component: VRateSelectMediaType,
     layout: "/admin"
   },
   {
-    path: "/radio-media-companies",
-    name: "Radio",
+    path: "/view-media-house",
+    name: "Media Houses",
+    invisible:true,
     header:"rate",
-    component: Radio,
+    component: VRateSelectMediaHouse,
+    layout: "/admin"
+  },
+  {
+    
+    path: "/create-ratecard",
+    name: "Create Ratecard",
+    header:"rate",
+    component: CRateSelectMediaType,
+    layout: "/admin"
+  },
+  {
+    path: "/select-media-house",
+    name: "Select Media House",
+    invisible:true,
+    header:"rate",
+    component: CRateSelectMediaHouse,
+    layout: "/admin"
+  },
+  {
+    path: "/rate-card-title",
+    name: "Rate Card Title",
+    invisible:true,
+    header:"rate",
+    component: CreateRateCardTitle,
     layout: "/admin"
   }, 
   {
-    path: "/print-media-companies",
-    name: "Print Media",
+    path: "/rate-details",
+    name: "Rate Card Details",
+    invisible:true,
     header:"rate",
-    component: Print,
+    component: RateCardDetails,
     layout: "/admin"
-  }, 
+  },
+  {
+    path: "/print-rate-details",
+    name: "Rate Card Details",
+    invisible:true,
+    header:"rate",
+    component: PrintRateDetails,
+    layout: "/admin"
+  },
+  {
+    path: "/video-preview",
+    name: "Preview",
+    invisible:true,
+    header:"rate",
+    component: VideoPreview,
+    layout: "/admin"
+  },
+  {
+    path: "/print-preview",
+    name: "Preview",
+    invisible:true,
+    header:"rate",
+    component: PrintPreview,
+    layout: "/admin"
+  },
+  
+  {
+    path: "/create-existing",
+    name: "Create From Existing",
+    header:"rate",
+    component: ERateSelectMediaType,
+    layout: "/admin"
+  },
+  {
+    path: "/existing-media-house",
+    name: "Select Media House",
+    invisible:true,
+    header:"rate",
+    component: ERateSelectMediaHouse,
+    layout: "/admin"
+  },
+  {
+    path: "/existing-select-rateCard",
+    name: "Select RateCard",
+    invisible:true,
+    header:"rate",
+    component: ESelectRateCard,
+    layout: "/admin"
+  },
+  
+  {
+    path: "/exiting-title",
+    name: "Enter Ratecard Title",
+    invisible:true,
+    header:"rate",
+    component: CreateExistingTitle,
+    layout: "/admin"
+  },
+  {
+    path: "/select-rate-card",
+    name: "Select RateCard",
+    invisible:true,
+    header:"rate",
+    component: VSelectRateCard,
+    layout: "/admin"
+  },
+  {
+    path: "/print-details",
+    name: "Ratecard Details",
+    invisible:true,
+    header:"rate",
+    component: ViewRateCardPrint,
+    layout: "/admin"
+  },
+  
+  {
+    path: "/video-details",
+    name: "Ratecard Details",
+    invisible:true,
+    header:"rate",
+    component: ViewRateCardVideo,
+    layout: "/admin"
+  },
   {
     path: "/transactions",
     name: "Transactions",
