@@ -24,7 +24,7 @@ function CRateSelectMediaHouse(props) {
  const toggle = () => setTooltipOpen(!tooltipOpen);
 
  let user =localStorage.getItem('access_token');
- var domain = "https://admin.test.backend.kokrokooad.com";
+ var domain = "https://admin-backend.kokrokooad.com";
  React.useEffect(()=>{
    setIsActive(true)
     axios.get(`${domain}/api/get/${props.location.state.id}/media-house`,{
