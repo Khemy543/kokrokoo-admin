@@ -12,7 +12,8 @@ export default function SubCompanyCard(props){
     const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
     const toggle = () => setTooltipOpen(!tooltipOpen);
-    const {id, media_house,langauage,regions, company_name, logo, purpose} = props.data;
+    const {id, media_house,languages,region, company_name, logo, purpose} = props.data;
+    console.log(props.data)
 
     return(
         <>
@@ -38,9 +39,9 @@ export default function SubCompanyCard(props){
                   <Tooltip key={id} placement="right" isOpen={tooltipOpen} target={"tooltip-" + id} toggle={toggle}>
                   <p style={{fontSize:"12px",fontWeight:600, marginTop:"0px",marginBottom:"0px", color:"white"}}>PURPOSE: <br/><span>{purpose}</span></p>
                   <br/>
-                    <p style={{fontSize:"12px",fontWeight:600, marginTop:"0px",marginBottom:"0px", color:"white"}}>COVERAGE REGIONS:<br/> {/* <span>{regions.toString()}</span> */}</p>
+                    <p style={{fontSize:"12px",fontWeight:600, marginTop:"0px",marginBottom:"0px", color:"white"}}>COVERAGE REGIONS:<br/> <span>{region}</span></p>
                     <br/>
-                    <p style={{fontSize:"12px",fontWeight:600, marginTop:"0px",marginBottom:"0px", color:"white"}}>LANGUAGE OF COMMUNICATION: <br/>{/* <span>{langauage.toString()}</span> */}</p>
+                    <p style={{fontSize:"12px",fontWeight:600, marginTop:"0px",marginBottom:"0px", color:"white"}}>LANGUAGE OF COMMUNICATION: <br/><span>{languages}</span></p>
                   </Tooltip>
             </Col>
         </>

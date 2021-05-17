@@ -4,82 +4,87 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 // reactstrap components
 import {
   Card,
-  CardHeader,
   CardBody,
   Container,
   Row,
   Col,
-  UncontrolledTooltip,
-  Input,
-  Button,
-  Spinner,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label, Modal, ModalHeader, ModalFooter
+  Button,Table,
+  Modal,
+  ModalBody,Spinner,
+  ModalFooter,
+  ModalHeader
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
 import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
-import axios from "axios";
+import axios from "axios";/* 
+import history from "../../history.js"; */
 
 let user = localStorage.getItem("access_token");
-var domain = "https://admin-backend.kokrokooad.com";
+var domain = "https://admin.test.backend.kokrokooad.com";
 
 function VSelectRateCard(props) {
     const [isActive, setIsActive] = React.useState(false);
-    const [isActiveSpinner, setIsActiveSpinner] = React.useState(false);
-    const [titles, setTitles] = React.useState([]);
-    const [id,setId] = React.useState(null);
+    const [isActiveSpinner, setIsActiveSpinner] = React.useState(true);
+    const [rateCards, setRateCards] = React.useState([]);
     const [modal, setModal] = React.useState(false);
-    const [message, setMessage] = React.useState("")
+    const [deleteID, setId]=React.useState(null);
+    const [alertModal, setAlertModal] = React.useState(false)
+
 
 
     React.useEffect(()=>{
-        setIsActiveSpinner(true)
+      setIsActiveSpinner(true)
         axios.get(`${domain}/api/admin/ratecard/company/${props.location.state.media_house_id}/ratecards`,
-        {headers:{ 'Authorization':`Bearer ${user}`}})
-        .then(res=>{
-            console.log(res.data);
-            setTitles(res.data.data);
-            if(res.data.data.length > 0){
-              setId(res.data.data[0].id)
-            }
-            setIsActiveSpinner(false)
-        })
-        .catch(error=>{
-            console.log(error);
-            if(error.response.data.status === "Forbidden"){
-              setModal(true);
-              setMessage("Access Denied")
-            }
-        })
+    {headers:{ 'Authorization':`Bearer ${user}`}})
+    .then(res=>{
+        console.log(res.data);
+        setRateCards(res.data.data)
+        setIsActiveSpinner(false)
+    })
+    .catch(error=>{
+        console.log(error)
+    })
     },[])
+    
 
-    const pass=()=>{
-        /* axios.post("https://media-kokrokooad.herokuapp.com/api/admin/ratecard/1/create-from-existing",title,
-        {headers:{ 'Authorization':`Bearer ${user}`}})
-        .then(res=>{
-            console.log(res.data);
-        })
-        .catch(error=>{
-            console.log(error.response.data)
-        }) */
-        if(props.location.state.id === "3"){
-          props.history.push("/admin/print-details",{id:props.location.state.id, rate_card_id:id, media_house_id:props.location.state.media_house_id });
-        }
-        else{
-          props.history.push("/admin/video-details",{id:props.location.state.id, rate_card_id:id, media_house_id:props.location.state.media_house_id });
-        }
-       
+    
+    const handleView=(id)=>{
+      if(props.location.state.id == '3'){
+        props.history.push("/admin/print-details",{title_id:id});
+      }
+      else{
+        props.history.push("/admin/video-details",{title_id:id});
+      }
+      
     }
-    
 
-    
+    const hanldeDelete=()=>{
+      setModal(false);
+      setIsActive(true)
+      axios.delete(`${domain}/api/admin/ratecard/${deleteID}/delete`,
+      {headers:{ 'Authorization':`Bearer ${user}`}})
+      .then(res=>{
+        console.log(res.data)
+        if(res.data.status ==="Ratecard deleted"){
+          let tempData = rateCards;
+          let newData = tempData.filter(item=>item.id !== deleteID);
+          setRateCards(newData)
+          setIsActive(false);
+        }
+      })
+      .catch(error=>{
+        console.log(error);
+        if(error.response.data.status === "Forbidden"){
+          setAlertModal(true)
+          setIsActive(false)
+        }
+      })
+    }
+
     return (
       <>
-      <LoadingOverlay 
-      active = {isActive}
-      spinner={<FadeLoader color={'#4071e1'}/>}
-      >
       <Header/>
         <Container className=" mt--8" fluid>
         {isActiveSpinner?
@@ -90,59 +95,92 @@ function VSelectRateCard(props) {
           </Row>
           :
           <>
-          {!isActiveSpinner && titles.length<=0?
-            <Row>
-                <Col md="12" style={{textAlign:"center"}}>
-                <h4>You Have No Existing Ratecards</h4> 
-                </Col>
-              </Row>
-              :
-          <>
           <Row>
-            <Col md="10" sm="12" lg="10" xl="10" xs="12">
+            <Col lg="12" md="12" sm="12" md="12" xs="12">
             <p style={{fontSize:"13px", fontWeight:500}}
-            >Create RateCard From Existing RateCards, Select A RateCard <span style={{color:"red"}}>Title</span></p>
-            <Card className="shadow">
-            <CardHeader className=" bg-transparent">
-                  <h3 className=" mb-0">ENTER NEW TITLE</h3>
-            </CardHeader>
-
-            <CardBody>
-            <Row>
-                <Col md="12">
-                <Input type="select" value={id} onChange={e=>setId(e.target.value)}>
-                {titles.map((value)=>(
-                    <option key={value.id} value={value.id}>{value.rate_card_title}</option>
-                ))}
-                </Input>
-                <br/> 
-                    <Button
-                    color="info"
-                    onClick={pass}
-                    >
-                    Next
-                    </Button>
-                    </Col>
-                </Row>
-            </CardBody>    
-            </Card>    
-            </Col>
-            </Row>
+            >Edit, Delete and View RateCard Services</p>
+            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+            <CardBody style={{overflowX:"scroll"}}>
+            <Table stripped bordered>
+            <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
+            <tr>
+              <th>#</th>{/* 
+              <th>Rate Card ID</th> */}
+              <th>Rate Card</th>
+              <th>Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rateCards.map((value, index)=>(
+              <tr>
+              <td>{index+1}</td>{/* 
+              <td>{value.id}</td> */}
+              <td>{value.rate_card_title}</td>
+              <td>{value.service_description}</td>
+              <td>
+                <Row>
+                  <Col md="6" lg="6" sm="6" xs="6" >
+                  <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>handleView(value.id)}><i className="fa fa-eye"/></Button>
+                 
+                  
+                  <Button color="success" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}}
+                    onClick={()=>props.history.push("/admin/edit-ratecard-title",
+                            {
+                              id : props.location.state.id,
+                              media_house_id : props.location.state.media_house_id,
+                              title_id:value.id,
+                              description:value.service_description,
+                              file_types:value.file_types,
+                              title:value.rate_card_title
+                              
+                            })}
+                  ><i className="fa fa-pencil"/></Button>
+                  
+                  <Button color="danger" style={{borderRadius:"100%", padding:"2px 6px 2px 6px"}}
+                  onClick={()=>{setModal(true); setId(value.id)}}
+                  ><i className="fa fa-trash"/></Button>
+                  
+                  </Col>
+                </Row>  
+                </td>
+            </tr>
+            ))}  
+          </tbody>
+          </Table> 
+          </CardBody>
+          </Card>
+          </Col>
+          </Row> 
           </>
         }
-          </>
-        }
-
         </Container>
         <Modal isOpen={modal}>
           <ModalHeader>
-            {message}
+            Do you want to Delete?
           </ModalHeader>
           <ModalFooter>
-            <Button color="danger" onClick={()=>setModal(false)}>Close</Button>
+            <Button color="danger"
+            onClick={()=>hanldeDelete()}
+            >
+              Yes
+            </Button>
+            <Button color="info"
+            onClick={()=>setModal(false)}
+            >
+              No
+            </Button>
           </ModalFooter>
         </Modal>
-        </LoadingOverlay>
+
+        <Modal isOpen={alertModal}>
+          <ModalHeader>
+            Access Denied
+          </ModalHeader>
+          <ModalFooter>
+            <Button color="danger" onClick={()=>setAlertModal(false)}>Close</Button>
+          </ModalFooter>
+        </Modal>
       </>
     );
   }

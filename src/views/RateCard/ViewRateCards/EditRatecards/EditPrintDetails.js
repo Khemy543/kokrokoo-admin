@@ -18,7 +18,6 @@
 import React from "react";
 // react component that copies the given text inside your clipboard
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import NavigationPrompt from "react-router-navigation-prompt";
 // reactstrap components
 import {
   Card,
@@ -27,10 +26,11 @@ import {
   Container,
   Row,
   Col,
+  UncontrolledTooltip,
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Label,Spinner,Modal,ModalHeader,ModalFooter,FormGroup
+  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label,Spinner,Modal,ModalFooter,ModalHeader
 } from "reactstrap";
 import classnames from 'classnames';
 // core components
@@ -42,22 +42,15 @@ import history from "../../history.js"; */
 let user = localStorage.getItem("access_token");
 var domain = "https://admin.test.backend.kokrokooad.com";
 
-class PrintRateDetails extends React.Component {
+class EditRateCardDetailsPrint extends React.Component {
     
     state = {
         isActive:false,
-        isActiveSpinner:true,
         days:[],
         activeTab:"1",
+        isActiveSpinner:true,
         allow:true,
         modal:false,
-        replicateMonday:[],
-        replicateTuesday:[],
-        replicateWednesday:[],
-        replicateThursday:[],
-        replicateFriday:[],
-        replicateSaturday:[],
-        replicateSunday:[],
 
         newSlot:[],
         slotValue:2,
@@ -100,16 +93,22 @@ class PrintRateDetails extends React.Component {
         sizeSun:"",
         rateSun:"",
         page_sectionSun:"First Page",
+        replicateMonday:[],
+        replicateTuesday:[],
+        replicateWednesday:[],
+        replicateThursday:[],
+        replicateFriday:[],
+        replicateSaturday:[],
+        replicateSunday:[],
     }
 
     componentDidMount(){
-        this.setState({isActiveSpinner:true});
         console.log(this.props.location)
         if(this.props.location.state !== undefined){
             this.setState({title:this.props.location.state.rate_title});
         }
         else{
-            this.props.history.push("/admin/create-ratecards")
+            this.props.history.push("/media/create-ratecards")
         }
         
 
@@ -124,7 +123,6 @@ class PrintRateDetails extends React.Component {
         if(this.state.activeTab !== tab) this.setState({activeTab:tab});
       }
 
-
       pushTypeMonday=(value,check)=>{
         let array = this.state.replicateMonday;
         if(check){
@@ -135,6 +133,7 @@ class PrintRateDetails extends React.Component {
                 array.splice(index,1);
             }
         }
+        console.log(array)
         this.setState({replicateMonday : array})
     }
 
@@ -284,12 +283,12 @@ class PrintRateDetails extends React.Component {
          tempSlot.unshift({id:1,size:this.state.size,cost:this.state.rate,page_section:this.state.page_section});
           console.log(tempSlot);
           axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-          {day_id:1,other_days:this.state.replicateMonday, ratecard_title_id : this.props.location.state.title_id, details:tempSlot, rate_card_title:this.state.title},
+          {day_id:1, details:tempSlot, other_days:this.state.replicateMonday,ratecard_title_id:this.props.location.state.title_id, rate_card_title:this.state.title},
           {headers:{ 'Authorization':`Bearer ${user}`}}) 
           .then(res=>{
               console.log(res.data);
               if(res.data.status === "saved"){
-              this.setState({ 
+              this.setState({
                   isActive:false,
                   size:"",
                   rate:"",
@@ -298,7 +297,6 @@ class PrintRateDetails extends React.Component {
                   title:res.data.rate_card_title,
                   modal:true
                  });
-              
               }
           })
           .catch(error=>{
@@ -369,13 +367,13 @@ class PrintRateDetails extends React.Component {
         }
     
         handleSubmitTues=(e)=>{
-            console.log("start submitting", this.state.replicateTuesday);
+            console.log("start submitting");
             this.setState({isActive:true});
              let tempSlot = [...this.state.newSlotTues];
              tempSlot.unshift({id:1,size:this.state.sizeTues,cost:this.state.rateTues,page_section:this.state.page_sectionTues});
               console.log(tempSlot);
               axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-              {day_id:2, other_days:this.state.replicateTuesday,ratecard_title_id : this.props.location.state.title_id, details:tempSlot,rate_card_title:this.state.title},
+              {day_id:2, details:tempSlot, other_days:this.state.replicateTuesday,ratecard_title_id:this.props.location.state.title_id,rate_card_title:this.state.title},
               {headers:{ 'Authorization':`Bearer ${user}`}}) 
               .then(res=>{
                   console.log(res.data);
@@ -465,7 +463,7 @@ class PrintRateDetails extends React.Component {
                  tempSlot.unshift({id:1,size:this.state.sizeWed,cost:this.state.rateWed, page_section:this.state.page_sectionWed});
                   console.log(tempSlot);
                   axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                  {day_id:3,other_days:this.state.replicateWednesday, details:tempSlot,rate_card_title:this.state.title},
+                  {day_id:3, details:tempSlot,ratecard_title_id:this.props.location.state.title_id, other_days:this.state.replicateWednesday, rate_card_title:this.state.title},
                   {headers:{ 'Authorization':`Bearer ${user}`}}) 
                   .then(res=>{
                       console.log(res.data);
@@ -482,7 +480,7 @@ class PrintRateDetails extends React.Component {
                       }
                   })
                   .catch(error=>{
-                      console.log(error)
+                      console.log(error.response.data)
                   })
           
                 }
@@ -551,10 +549,10 @@ class PrintRateDetails extends React.Component {
                     console.log("start submitting");
                     this.setState({isActive:true});
                      let tempSlot = [...this.state.newSlotThurs];
-                     tempSlot.unshift({id:1,size:this.state.sizeThurs,cost:this.state.rateThurs,page_section:this.state.page_sectionThurs});
+                     tempSlot.unshift({id:1,size:this.state.sizeThurs, cost:this.state.rateThurs,page_section:this.state.page_sectionThurs});
                       console.log(tempSlot);
                       axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                      {day_id:4, other_days:this.state.replicateThursday, details:tempSlot,rate_card_title:this.state.title},
+                      {day_id:4, details:tempSlot,ratecard_title_id:this.props.location.state.title_id,rate_card_title:this.state.title, other_days:this.state.replicateThursday},
                       {headers:{ 'Authorization':`Bearer ${user}`}}) 
                       .then(res=>{
                           console.log(res.data);
@@ -643,7 +641,7 @@ class PrintRateDetails extends React.Component {
                          tempSlot.unshift({id:1,size:this.state.sizeFri,cost:this.state.rateFri, page_section:this.state.page_sectionFri});
                           console.log(tempSlot);
                           axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                          {day_id:5, other_days:this.state.replicateFriday, details:tempSlot,rate_card_title:this.state.title},
+                          {day_id:5, details:tempSlot,ratecard_title_id:this.props.location.state.title_id,rate_card_title:this.state.title, other_days:this.state.replicateFriday},
                           {headers:{ 'Authorization':`Bearer ${user}`}}) 
                           .then(res=>{
                               console.log(res.data);
@@ -732,7 +730,7 @@ class PrintRateDetails extends React.Component {
                              tempSlot.unshift({id:1,size:this.state.sizeSat,cost:this.state.rateSat, page_section:this.state.page_sectionSat});
                               console.log(tempSlot);
                               axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                              {day_id:6, other_days:this.state.replicateSaturday, details:tempSlot,rate_card_title:this.state.title},
+                              {day_id:6, details:tempSlot,ratecard_title_id:this.props.location.state.title_id,rate_card_title:this.state.title, other_days:this.state.replicateSaturday},
                               {headers:{ 'Authorization':`Bearer ${user}`}}) 
                               .then(res=>{
                                   console.log(res.data);
@@ -822,7 +820,7 @@ class PrintRateDetails extends React.Component {
                                  tempSlot.unshift({id:1,size:this.state.sizeSun,cost:this.state.rateSun, page_section:this.state.page_sectionSun});
                                   console.log(tempSlot);
                                   axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                                  {day_id:7, other_days:this.state.replicateSunday, details:tempSlot,rate_card_title:this.state.title},
+                                  {day_id:7, details:tempSlot,ratecard_title_id:this.props.location.state.title_id,rate_card_title:this.state.title, other_days:this.state.replicateSunday},
                                   {headers:{ 'Authorization':`Bearer ${user}`}}) 
                                   .then(res=>{
                                       console.log(res.data);
@@ -845,14 +843,7 @@ class PrintRateDetails extends React.Component {
                                 }
 
 
-                                handleDeleteRatecard=()=>{
-                                    axios.delete(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/delete`,
-                                    {headers:{ 'Authorization':`Bearer ${user}`}})
-                                    .then(res=>{
-                                        console.log(res.data);
-                                        this.setState({allow:false})
-                                    })
-                                }
+
 
     render(){
     return (
@@ -861,22 +852,6 @@ class PrintRateDetails extends React.Component {
       active = {this.state.isActive}
       spinner={<FadeLoader color={'#4071e1'}/>}
       >
-      <NavigationPrompt when={this.state.allow} 
-        afterConfirm={()=>this.handleDeleteRatecard()}
-        disableNative={true}
-        >
-        {({ onConfirm, onCancel }) => (
-            <Modal isOpen={this.state.allow}>
-                <ModalHeader>
-                You have unsaved changes, are you sure you want to leave?
-                </ModalHeader>
-                <ModalFooter>
-                    <Button color="danger" onClick={onConfirm}>Yes</Button>
-                    <Button color="info" onClick={onCancel}>No</Button>
-                </ModalFooter>
-            </Modal>
-        )}
-        </NavigationPrompt>;
       <Header/>
         <Container className=" mt--8" fluid>
         {this.state.isActiveSpinner?
@@ -1251,7 +1226,7 @@ class PrintRateDetails extends React.Component {
                            </Col>
                            <Col md="3" sm="3" xs="3" lg="3">
                            
-                            <Input type="select" min="0" value={this.state.newSlotFri[index].page_section} onChange={e=>this.handlePageChangeFri(value.id,e.target.value)}>
+                            <Input type="select" min="0" value={this.state.newSlotSat[index].page_section} onChange={e=>this.handlePageChangeFri(value.id,e.target.value)}>
                             <option value="Front Page">Front Page</option>
                             <option value="Back Page">Back Page</option>
                             <option value="Middle Page">Middle Page</option>
@@ -1441,7 +1416,6 @@ class PrintRateDetails extends React.Component {
             </Card>    
             </Col>
             </Row>
-        
             <Row style={{marginTop:"25px", marginBottom:"20px"}}>
                 <Col lg="10">
                 
@@ -1452,7 +1426,7 @@ class PrintRateDetails extends React.Component {
                     this.setState({allow:false});
                     setTimeout(
                         function(){
-                         this.props.history.push("/admin/print-preview",{title_id:this.props.location.state.title_id})
+                         this.props.history.push("/admin/edit/print",{title_id:this.props.location.state.title_id})
                     }
                     .bind(this),500
                     )}}
@@ -1479,7 +1453,7 @@ class PrintRateDetails extends React.Component {
 }
 
 
-export default PrintRateDetails;
+export default EditRateCardDetailsPrint;
 
 
 

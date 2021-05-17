@@ -18,7 +18,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://admin-backend.kokrokooad.com";
+var domain = "https://admin.test.backend.kokrokooad.com";
 
 class ViewRateCardVideo extends React.Component{
 
@@ -42,7 +42,7 @@ class ViewRateCardVideo extends React.Component{
             this.setState({days:res.data.days, units:res.data.units})
         });
 
-        axios.get(`${domain}/api/admin/ratecard/${this.props.location.state.rate_card_id}/preview`,
+        axios.get(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/preview`,
       { headers: { 'Authorization': `Bearer ${user}` } })
       .then(res => {
         console.log(res.data);

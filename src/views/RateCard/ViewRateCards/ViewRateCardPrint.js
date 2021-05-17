@@ -35,7 +35,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://admin-backend.kokrokooad.com";
+var domain = "https://admin.test.backend.kokrokooad.com";
 
 class ViewRateCardPrint extends React.Component{
 
@@ -57,7 +57,7 @@ class ViewRateCardPrint extends React.Component{
             this.setState({days:res.data.days, units:res.data.units})
         });
 
-        axios.get(`${domain}/api/admin/ratecard/${this.props.location.state.rate_card_id}/preview`,
+        axios.get(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/preview`,
       { headers: { 'Authorization': `Bearer ${user}` } })
       .then(res => {
         console.log("fitsdy",res.data.details);
@@ -200,7 +200,7 @@ class ViewRateCardPrint extends React.Component{
             <Col>
             <Button
             color="danger"
-            onClick={()=>this.props.history.push('/admin/select-rate-card',{media_house_id : this.props.location.state.id})}
+            onClick={()=>this.props.history.push('/admin/select-rate-card',{media_house_id : this.props.location.state.title_id})}
             >
             Back
             </Button>

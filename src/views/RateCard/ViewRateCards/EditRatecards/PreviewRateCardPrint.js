@@ -1,5 +1,4 @@
 import React from "react";
-import NavigationPrompt from "react-router-navigation-prompt";
 // reactstrap components
 import {
   Card,
@@ -7,7 +6,7 @@ import {
   Container,
   Row,
   Col, CardHeader, Nav, NavItem, NavLink,
-  TabContent,TabPane,Input,Button,Spinner,ModalHeader,ModalFooter,Modal,CardFooter
+  TabContent,TabPane,Input,Button,Spinner,CardFooter, Modal, ModalHeader, ModalFooter
 } from "reactstrap";
 // core components
 import classnames from 'classnames';
@@ -20,12 +19,11 @@ import history from "../../history.js"; */
 let user = localStorage.getItem("access_token");
 var domain = "https://admin.test.backend.kokrokooad.com";
 
-class PrintPreview extends React.Component{
+class EditPrint extends React.Component{
 
   state={
     isActive:false,
     isActiveSpinner:true,
-    allow:true,
     activeTab:"1",
     days:[],
     data:[],
@@ -36,11 +34,12 @@ class PrintPreview extends React.Component{
       {id:2, page_section:"Back Page"},
       {id:3,page_section:"Middle Page"}
     ],
-    title:""
+    title:"",
+    modal:false,
+    alertMessage:""
   }
 
   componentDidMount(){
-    this.setState({isActiveSpinner:true});
     axios.get(`https://media.test.backend.kokrokooad.com/api/fetch-days-and-units`)
     .then(res=>{
         console.log(res.data)
@@ -66,6 +65,9 @@ class PrintPreview extends React.Component{
       })
       .catch(error => {
         console.log(error)
+        if(error.response.data.status === "Forbidden"){
+          this.setState({modal:true, alertMessage:"Access Denied"})
+        }
       });
 
 
@@ -123,50 +125,26 @@ class PrintPreview extends React.Component{
     }
   }
 
-  handleComplete=()=>{
-    console.log("completing...")
-    axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/complete/create`,null,
-    { headers: { 'Authorization': `Bearer ${user}`}})
-    .then(res=>{
-      console.log(res.data);
-      this.setState({allow:false})
-      this.props.history.push('/admin/index')
-    })
-    .catch(error=>{
-      console.log(error.response.data)
-    })
-  }
-
-
-  handleDeleteRatecard=()=>{
-    axios.delete(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/delete`,
-    {headers:{ 'Authorization':`Bearer ${user}`}})
-    .then(res=>{
+  handleSubmit=(id)=>{
+    console.log(this.state.details)
+      /* axios.patch(`${domain}/api/ratecard/${id}/update`,
+      {start_time:selected.start_time, end_time:selected.end_time, no_of_spots:selected.no_of_spots,day_id:selected.day.id, durations:selected.duration},
+      { headers: { 'Authorization': `Bearer ${user}`}})
+      .then(res=>{
         console.log(res.data);
-        this.setState({allow:false})
-    })
-}
-
-handleSubmit=(id)=>{
-console.log(this.state.details)
-  /* axios.patch(`${domain}/api/admin/ratecard/${id}/update`,
-  {start_time:selected.start_time, end_time:selected.end_time, no_of_spots:selected.no_of_spots,day_id:selected.day.id, durations:selected.duration},
-  { headers: { 'Authorization': `Bearer ${user}`}})
-  .then(res=>{
-    console.log(res.data);
-    if(res.data.status === "saved"){
-      this.setState({
-        isActive:false,
-        alertMessage:"Changes Saved",
-        modal:true
+        if(res.data.status === "saved"){
+          this.setState({
+            isActive:false,
+            alertMessage:"Changes Saved",
+            modal:true
+          })
+        }
       })
+      .catch(error=>{
+        console.log(error);
+        this.setState({isActive:false})
+      }) */
     }
-  })
-  .catch(error=>{
-    console.log(error);
-    this.setState({isActive:false})
-  }) */
-}
 
   render(){
   return (
@@ -175,22 +153,6 @@ console.log(this.state.details)
         active={this.state.isActive}
         spinner={<FadeLoader color={'#4071e1'} />}
       >
-      <NavigationPrompt when={this.state.allow} 
-        afterConfirm={()=>this.handleDeleteRatecard()}
-        disableNative={true}
-        >
-        {({ onConfirm, onCancel }) => (
-            <Modal isOpen={this.state.allow}>
-                <ModalHeader>
-                You have unsaved changes, are you sure you want to leave?
-                </ModalHeader>
-                <ModalFooter>
-                    <Button color="danger" onClick={onConfirm}>Yes</Button>
-                    <Button color="info" onClick={onCancel}>No</Button>
-                </ModalFooter>
-            </Modal>
-        )}
-        </NavigationPrompt>;
         <Header />
         <Container className=" mt--8" fluid>
         {this.state.isActiveSpinner?
@@ -241,13 +203,13 @@ console.log(this.state.details)
                           <>
                           <Row>
                             <Col md="3">
-                            <h3  id="boldstyle">Size</h3>
+                            <h3 id="boldstyle">Size</h3>
                             </Col>
                             <Col md="3">
-                            <h3  id="boldstyle">Cost</h3>
+                            <h3 id="boldstyle">Cost</h3>
                             </Col>
                             <Col md="3">
-                            <h3  id="boldstyle">Page Section</h3>
+                            <h3 id="boldstyle">Page Section</h3>
                             </Col>
                             <Col md="2">
                             <h3 id="boldstyle" style={{textAlign:"center"}}>Delete</h3>
@@ -284,7 +246,7 @@ console.log(this.state.details)
                           </Row>
                           ))}
                           </>
-                            }
+                          }
                           <Row>
                             <Col md="5">
                               <Button
@@ -302,7 +264,7 @@ console.log(this.state.details)
                             
                 </Col>    
                 </Row>
-            </CardBody>   
+            </CardBody>    
             <CardFooter>
             <Button
                     style={{float:"right"}}
@@ -311,7 +273,7 @@ console.log(this.state.details)
                       setTimeout(
                     function(){
                         
-                      this.props.history.push("/admin/print-rate-details",{title_id:this.props.location.state.title_id, rate_title:this.state.title})
+                      this.props.history.push("/admin/edit-print-details",{title_id:this.props.location.state.title_id, rate_title:this.state.title})
                     }
                     .bind(this),
                     500
@@ -323,7 +285,7 @@ console.log(this.state.details)
 
                     <Button
                     style={{float:"right", marginRight:"10px"}}
-                    onClick={()=>this.handleComplete()}
+                    onClick={()=>this.props.history.push("/admin/view-ratecards")}
                     color="success"
                     >
                    Complete
@@ -335,6 +297,15 @@ console.log(this.state.details)
             </>
         }
         </Container>
+        <Modal isOpen={this.state.modal}>
+          <ModalHeader>
+            Access Denied
+          </ModalHeader>
+          <ModalFooter>
+            <Button color="danger" onClick={()=>this.setState({modal:false})}>Close</Button>
+          </ModalFooter>
+        </Modal>
+
         </LoadingOverlay>
       </>
     );
@@ -342,4 +313,4 @@ console.log(this.state.details)
 }
 
 
-export default PrintPreview;
+export default EditPrint;

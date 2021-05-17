@@ -36,6 +36,11 @@ import CreateExistingTitle from "views/RateCard/CreateFrom Existing/RateCardTitl
 import VSelectRateCard from "views/RateCard/ViewRateCards/SelectRateCard";
 import ViewRateCardPrint from "views/RateCard/ViewRateCards/ViewRateCardPrint";
 import ViewRateCardVideo from "views/RateCard/ViewRateCards/ViewRateCardVideo";
+import EditRateCardTitle from "views/RateCard/ViewRateCards/EditRateCardTitle";
+import EditRateCardDetailsVideo from "views/RateCard/ViewRateCards/EditRatecards/EditVideoDetails";
+import EditVideo from "views/RateCard/ViewRateCards/EditRatecards/PreviewRateCardVideo";
+import EditPrint from "views/RateCard/ViewRateCards/EditRatecards/PreviewRateCardPrint";
+import EditRateCardDetailsPrint from "views/RateCard/ViewRateCards/EditRatecards/EditPrintDetails";
 
 var routes = [
   {
@@ -136,7 +141,7 @@ var routes = [
     invisible:true,
     header:"rate",
     component: PrintRateDetails,
-    layout: "/admin"
+    layout: "/admin" 
   },
   {
     path: "/video-preview",
@@ -210,6 +215,50 @@ var routes = [
     invisible:true,
     header:"rate",
     component: ViewRateCardVideo,
+    layout: "/admin"
+  },
+  {
+    path: "/edit-ratecard-title",
+    name: "Edit Ratecard",
+    invisible:true,
+    header:"rate",
+    component: EditRateCardTitle,
+    layout: "/admin"
+  },
+  
+  {
+    path: "/edit-video-details",
+    name: "Edit Ratecard",
+    invisible:true,
+    header:"rate",
+    component: EditRateCardDetailsVideo,
+    layout: "/admin"
+  },
+  
+  {
+    path: "/edit-print-details",
+    name: "Edit Ratecard",
+    invisible:true,
+    header:"rate",
+    component: EditRateCardDetailsPrint,
+    layout: "/admin"
+  },
+  
+  {
+    path: "/edit/video",
+    name: "Edit Ratecard",
+    invisible:true,
+    header:"rate",
+    component: EditVideo,
+    layout: "/admin"
+  },
+  
+  {
+    path: "/edit/print",
+    name: "Edit Ratecard",
+    invisible:true,
+    header:"rate",
+    component: EditPrint,
     layout: "/admin"
   },
   {

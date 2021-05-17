@@ -21,7 +21,7 @@ import history from "../../history.js"; */
 let user = localStorage.getItem("access_token");
 var domain = "https://admin.test.backend.kokrokooad.com";
 
-class VideoPreview extends React.Component{
+class EditVideo extends React.Component{
 
   state={
     isActive:false,
@@ -196,27 +196,28 @@ class VideoPreview extends React.Component{
     .then(res=>{
       console.log(res.data);
       if(res.data.status === "saved"){
+        
         this.setState({
-          isActive:false,
-          alertMessage:"Changes Saved",
-          modal:true
+            isActive:false,
+            modal:true,
+            alertMessage:"Changed Saved"
         })
       }
     })
     .catch(error=>{
-      console.log(error);
+      console.log(error.response.data);
       this.setState({isActive:false})
     })
   }
 
   handleComplete=()=>{
     console.log("completing...")
-    axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/complete/create`,null,
+    axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/complete/create`,null,
     { headers: { 'Authorization': `Bearer ${user}`}})
     .then(res=>{
       console.log(res.data);
       this.setState({allow:false})
-      this.props.history.push('/admin/index')
+      this.props.history.push('/admin/view-ratecards')
     })
     .catch(error=>{
       console.log(error.response.data)
@@ -225,7 +226,7 @@ class VideoPreview extends React.Component{
 
 
   handleDeleteRatecard=()=>{
-    axios.delete(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/delete`,
+    axios.delete(`${domain}/api/ratecard/${this.props.location.state.title_id}/delete`,
     {headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
         console.log(res.data);
@@ -241,9 +242,9 @@ class VideoPreview extends React.Component{
         spinner={<FadeLoader color={'#4071e1'}/>}
       >
 
-        <NavigationPrompt when={this.state.allow} 
+        {/* <NavigationPrompt when={this.state.allow} 
         afterConfirm={()=>this.handleDeleteRatecard()}
-        disableNative={true}
+        
         >
         {({ onConfirm, onCancel }) => (
             <Modal isOpen={this.state.allow}>
@@ -256,7 +257,7 @@ class VideoPreview extends React.Component{
                 </ModalFooter>
             </Modal>
         )}
-        </NavigationPrompt>;
+        </NavigationPrompt>; */}
         <Header />
         <Container className=" mt--8" fluid>
         {this.state.isActiveSpinner?
@@ -343,7 +344,7 @@ class VideoPreview extends React.Component{
                         <Col md="12">
                         <Row>
                         <Col>
-                        <Label id="boldstyle">Maximum Number Of Spots</Label>
+                        <Label id="boldstyle">Number of Spots</Label>
                         <Input type="number" min="0" placeholder="Number of Spots" value={value.no_of_spots} onChange={e=>this.handleSpotChange(value.id,e.target.value)}/>
                         </Col>
                         <Col>
@@ -435,7 +436,7 @@ class VideoPreview extends React.Component{
                       setTimeout(
                     function(){
                         
-                      this.props.history.push("/admin/rate-details",{title_id:this.props.location.state.title_id, rate_title:this.state.title})
+                      this.props.history.push("/admin/edit-video-details",{title_id:this.props.location.state.title_id, rate_title:this.state.title})
                     }
                     .bind(this),
                     500
@@ -447,7 +448,7 @@ class VideoPreview extends React.Component{
 
                     <Button
                     style={{float:"right", marginRight:"10px"}}
-                    onClick={()=>this.handleComplete()}
+                    onClick={()=>this.props.history.push("/admin/view-ratecards")}
                     color="success"
                     >
                    Complete
@@ -459,7 +460,7 @@ class VideoPreview extends React.Component{
           </>
         }
         </Container>
-        <Modal isOpen={this.state.modal}>
+            <Modal isOpen={this.state.modal}>
                 <ModalHeader>
                     {this.state.alertMessage}
                 </ModalHeader>
@@ -474,6 +475,6 @@ class VideoPreview extends React.Component{
 }
 
 
-export default VideoPreview;
+export default EditVideo;
 
 /* onChange={e=>{e.target.value <= this.state.startTime? this.setState({timeCheck:true, EndTime:e.target.value}) : this.setState({timeCheck:false,EndTime:e.target.value})}} */

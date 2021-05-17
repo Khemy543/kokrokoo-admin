@@ -1,7 +1,5 @@
 
 import React from "react";
-import  { Prompt } from 'react-router-dom';
-import NavigationPrompt from "react-router-navigation-prompt";
 // reactstrap components
 import {
   Card,
@@ -25,7 +23,7 @@ import axios from "axios";
 let user = localStorage.getItem("access_token");
 var domain = "https://admin.test.backend.kokrokooad.com";
 
-class RateCardDetails extends React.Component{
+class EditRateCardDetailsVideo extends React.Component{
     state={
         dataUnsaved:true,
         isActive:false,
@@ -36,7 +34,6 @@ class RateCardDetails extends React.Component{
         title:"",
         allow:true,
         modal:false,
-        alertmessage:"",
 
         slotValue:2,
         newSlot:[],
@@ -46,7 +43,6 @@ class RateCardDetails extends React.Component{
         startTime:"",
         EndTime:"",
         oldTImeFrames:[],
-        replicateMonday:[],
         slotNumber:"",
         timeCheck:false,
 
@@ -59,7 +55,6 @@ class RateCardDetails extends React.Component{
         EndTimeTues:"",
         slotNumberTues:"",
         oldTImeFramesTues:[],
-        replicateTuesday:[],
         timeCheckTues:false,
 
         slotValueWed:2,
@@ -71,7 +66,6 @@ class RateCardDetails extends React.Component{
         EndTimeWed:"",
         slotNumberWed:"",
         oldTImeFramesWed:[],
-        replicateWednesday:[],
         timeCheckWed:false,
 
         slotValueThurs:2,
@@ -83,7 +77,6 @@ class RateCardDetails extends React.Component{
         EndTimeThurs:"",
         slotNumberThurs:"",
         oldTImeFramesThurs:[],
-        replicateThursday:[],
         timeCheckThurs:false,
 
         slotValueFri:2,
@@ -95,7 +88,6 @@ class RateCardDetails extends React.Component{
         EndTimeFri:"",
         slotNumberFri:"",
         oldTImeFramesFri:[],
-        replicateFriday:[],
         timeCheckFri:false,
 
         slotValueSat:2,
@@ -107,7 +99,6 @@ class RateCardDetails extends React.Component{
         EndTimeSat:"",
         slotNumberSat:"",
         oldTImeFramesSat:[],
-        replicateSaturday:[],
         timeCheckSat:false,
 
         slotValueSun:2,
@@ -119,8 +110,14 @@ class RateCardDetails extends React.Component{
         EndTimeSun:"",
         slotNumberSun:"",
         oldTImeFramesSun:[],
+        timeCheckSun:false,
+        replicateMonday:[],
+        replicateTuesday:[],
+        replicateWednesday:[],
+        replicateThursday:[],
+        replicateFriday:[],
+        replicateSaturday:[],
         replicateSunday:[],
-        timeCheckSun:false
     }
 
     componentDidMount(){
@@ -130,7 +127,7 @@ class RateCardDetails extends React.Component{
             this.setState({title:this.props.location.state.rate_title});
         }
         else{
-            this.props.history.push("/admin/create-ratecard")
+            this.props.history.push("/admin/create-ratecards")
         }
         
 
@@ -148,6 +145,92 @@ class RateCardDetails extends React.Component{
     toggle = tab => {
         if(this.state.activeTab !== tab) this.setState({activeTab:tab});
       }
+
+      pushTypeMonday=(value,check)=>{
+        let array = this.state.replicateMonday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateMonday : array})
+    }
+
+    pushTypeTuesday=(value,check)=>{
+        let array = this.state.replicateTuesday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateTuesday : array})
+    }
+
+    pushTypeWednesday=(value,check)=>{
+        let array = this.state.replicateWednesday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateWednesday : array})
+    }
+
+    pushTypeThursday=(value,check)=>{
+        let array = this.state.replicateThursday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateThursday : array})
+    }
+
+    pushTypeFriday=(value,check)=>{
+        let array = this.state.replicateFriday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateFriday : array})
+    }
+
+    pushTypeSaturday=(value,check)=>{
+        let array = this.state.replicateSaturday;
+        if(check){
+            array.push(value)
+        };
+        this.setState({replicateSaturday : array})
+    }
+
+    pushTypeSunday=(value,check)=>{
+        let array = this.state.replicateSunday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateSunday : array})
+    }
 
     AddSlotMonday=()=>{
         var tempSlot = [...this.state.newSlot];
@@ -211,95 +294,8 @@ class RateCardDetails extends React.Component{
         return(this.setState({newSlot:newArray}))
     }
 
-    pushTypeMonday=(value,check)=>{
-        let array = this.state.replicateMonday;
-        if(check){
-            array.push(value)
-        }else{
-            let index = array.indexOf(value);
-            if(index !== -1){
-                array.splice(index,1);
-            }
-        }
-        this.setState({replicateMonday : array})
-    }
-
-    pushTypeTuesday=(value,check)=>{
-        let array = this.state.replicateTuesday;
-        if(check){
-            array.push(value)
-        }else{
-            let index = array.indexOf(value);
-            if(index !== -1){
-                array.splice(index,1);
-            }
-        }
-        this.setState({replicateTuesday : array})
-    }
-
-    pushTypeWednesday=(value,check)=>{
-        let array = this.state.replicateWednesday;
-        if(check){
-            array.push(value)
-        };
-        this.setState({replicateWednesday : array})
-    }
-
-    pushTypeThursday=(value,check)=>{
-        let array = this.state.replicateThursday;
-        if(check){
-            array.push(value)
-        }else{
-            let index = array.indexOf(value);
-            if(index !== -1){
-                array.splice(index,1);
-            }
-        }
-        this.setState({replicateThursday : array})
-    }
-
-    pushTypeFriday=(value,check)=>{
-        let array = this.state.replicateFriday;
-        if(check){
-            array.push(value)
-        }else{
-            let index = array.indexOf(value);
-            if(index !== -1){
-                array.splice(index,1);
-            }
-        }
-        this.setState({replicateFriday : array})
-    }
-
-    pushTypeSaturday=(value,check)=>{
-        let array = this.state.replicateSaturday;
-        if(check){
-            array.push(value)
-        }else{
-            let index = array.indexOf(value);
-            if(index !== -1){
-                array.splice(index,1);
-            }
-        }
-        this.setState({replicateSaturday : array})
-    }
-
-    pushTypeSunday=(value,check)=>{
-        let array = this.state.replicateSunday;
-        if(check){
-            array.push(value)
-        }else{
-            let index = array.indexOf(value);
-            if(index !== -1){
-                array.splice(index,1);
-            }
-        }
-        this.setState({replicateSunday : array})
-    }
-
     handleSubmit=(e)=>{
        console.log("start submitting");
-       console.log(this.state.replicateMonday)
        this.setState({isActive:true});
         /* check time */
        
@@ -308,7 +304,7 @@ class RateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
          console.log(tempSlot);
          axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTime, ratecard_title_id : this.props.location.state.title_id, end_time:this.state.EndTime, day_id:1, other_days:this.state.replicateMonday, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
+         {start_time:this.state.startTime,ratecard_title_id : this.props.location.state.title_id, end_time:this.state.EndTime,other_days:this.state.replicateMonday, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log(res.data);
@@ -323,34 +319,42 @@ class RateCardDetails extends React.Component{
                  EndTime:"",
                  slotNumber:"",
                  newSlot:[],
-                 modal:true,
-                 alertmessage:"Saved!!"
+                 modal:true
                 });
              }
          })
          .catch(error=>{
-             if(error.response.status == 422){
-                 this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-             }else{
-                this.setState({modal:true, alertmessage:"All Fields Are Required "})
-             }
-             this.setState({isActive:false})
+             console.log(error.response.data)
          })
  
        }
        else{
-           if(this.state.startTime<this.state.EndTime){
+           var checker;
+           for(var i =0; i<this.state.oldTImeFrames.length; i++){
+               if(this.state.startTime < this.state.oldTImeFrames[i].end_time && this.state.EndTime>this.state.oldTImeFrames[i].start_time){
+                    alert("selected time intersects with a saved time");
+                    this.setState({isActive:false})
+                    checker = false;
+                    break;
+               }
+               else{
+                   checker = true;
+                   continue;
+                
+               }
+           }
+
+           if(checker === true && this.state.startTime<this.state.EndTime){
             let tempSlot = [...this.state.newSlot];
             tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
              console.log(tempSlot);
              axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-             {start_time:this.state.startTime,  ratecard_title_id : this.props.location.state.title_id, end_time:this.state.EndTime, day_id:1, other_days:this.state.replicateMonday, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
+             {start_time:this.state.startTime, ratecard_title_id : this.props.location.state.title_id, end_time:this.state.EndTime, day_id:1, other_days:this.state.replicateMonday, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
              {headers:{ 'Authorization':`Bearer ${user}`}}) 
              .then(res=>{
                  console.log(res.data);
                  if(res.data.status === "success"){
-                 this.setState({
-                    isActive:false,
+                 this.setState({isActive:false,
                     oldTImeFrames:res.data.segments,
                     duration:"",
                     unit:1,
@@ -358,21 +362,13 @@ class RateCardDetails extends React.Component{
                     startTime:"",
                     EndTime:"",
                     slotNumber:"",
-                    newSlot:[],
-                    modal:true,
-                    alertmessage:"Saved!!"
+                    modal:true
                 });
                  
                  }
              })
              .catch(error=>{
-                 
-             if(error.response.status == 422){
-                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-            }else{
-               this.setState({modal:true, alertmessage:"All Fields Are Required "})
-            }
-                 this.setState({isActive:false})
+                 console.log(error.response.data)
              })
            }
            else{
@@ -443,6 +439,7 @@ class RateCardDetails extends React.Component{
         var tempSlot = [...this.state.newSlotTues];
         let newArray = tempSlot.filter(item=>item.id !== id);
         return(this.setState({newSlotTues:newArray}))
+        console.log("temp",newArray)
     }
 
     handleSubmitTues=()=>{
@@ -453,7 +450,7 @@ class RateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
          console.log(tempSlot);
          axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2,other_days:this.state.replicateTuesday, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeTues, ratecard_title_id : this.props.location.state.title_id, other_days:this.state.replicateTuesday, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log(res.data);
@@ -468,29 +465,37 @@ class RateCardDetails extends React.Component{
                     EndTimeTues:"",
                     slotNumberTues:"",
                     newSlotTues:[],
-                    modal:true,
-                    alertmessage:"Saved!!"
+                    modal:true
                 });
 
              }
          })
          .catch(error=>{
-             console.log(error)
-             if(error.response.status == 422){
-                 this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-             }else{
-                this.setState({modal:true, alertmessage:"All Fields Are Required "})
-             }
-             this.setState({isActive:false})
+             console.log(error.response.data)
          })
         }
         else{
-            if(this.state.startTimeTues<this.state.EndTimeTues){
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesTues.length; i++){
+                if(this.state.startTimeTues < this.state.oldTImeFramesTues[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeTues<this.state.EndTimeTues){
                 let tempSlot = [...this.state.newSlotTues];
                 tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2,other_days:this.state.replicateTuesday, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeTues,ratecard_title_id : this.props.location.state.title_id, end_time:this.state.EndTimeTues, other_days:this.state.replicateTuesday, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log(res.data);
@@ -504,20 +509,13 @@ class RateCardDetails extends React.Component{
                             EndTimeTues:"",
                             slotNumberTues:"",
                             newSlotTues:[],
-                            modal:true,
-                            alertmessage:"Saved!!"
+                            modal:true
                         });
         
                      }
                  })
                  .catch(error=>{
-                     console.log(error)
-                     if(error.response.status == 422){
-                         this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-                     }else{
-                        this.setState({modal:true, alertmessage:"All Fields Are Required "})
-                     }
-                     this.setState({isActive:false})
+                     console.log(error.response.data)
                  })
             }
             else{
@@ -600,7 +598,7 @@ class RateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
          console.log(tempSlot);
          axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3,other_days:this.state.replicateWednesday, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeWed, ratecard_title_id : this.props.location.state.title_id, other_days:this.state.replicateWednesday, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -614,28 +612,36 @@ class RateCardDetails extends React.Component{
                     EndTimeWed:"",
                     slotNumberWed:"",
                     newSlotWed:[],
-                    modal:true,
-                    alertmessage:"Saved!!"
+                    modal:true
                 });
              }
          })
          .catch(error=>{
-             
-            if(error.response.status == 422){
-                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-            }else{
-               this.setState({modal:true, alertmessage:"All Fields Are Required "})
-            }
-             this.setState({isActive:false})
+             console.log(error.response.data)
          })
         }
         else{
-            if(this.state.startTimeWed<this.state.EndTimeWed){
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesWed.length; i++){
+                if(this.state.startTimeWed < this.state.oldTImeFramesWed[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeWed<this.state.EndTimeWed){
                 let tempSlot = [...this.state.newSlotWed];
                 tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, other_days:this.state.replicateWednesday, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, ratecard_title_id : this.props.location.state.title_id, day_id:3, other_days:this.state.replicateWednesday, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -649,20 +655,13 @@ class RateCardDetails extends React.Component{
                             EndTimeWed:"",
                             slotNumberWed:"",
                             newSlotWed:[],
-                            modal:true,
-                            alertmessage:"Saved!!"
+                            modal:true
                         });
         
                      }
                  })
                  .catch(error=>{
-                     
-             if(error.response.status == 422){
-                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-            }else{
-               this.setState({modal:true, alertmessage:"All Fields Are Required "})
-            }
-                     this.setState({isActive:false})
+                     console.log(error.response.data)
                  })
             }
 
@@ -740,7 +739,7 @@ class RateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
          console.log(tempSlot);
          axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, other_days:this.state.replicateThursday, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs,ratecard_title_id : this.props.location.state.title_id, other_days:this.state.replicateThursday, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -754,28 +753,36 @@ class RateCardDetails extends React.Component{
                     EndTimeThurs:"",
                     slotNumberThurs:"",
                     newSlotThurs:[],
-                    modal:true,
-                    alertmessage:"Saved!!"
+                    modal:true
                 });
              }
          })
          .catch(error=>{
-             
-            if(error.response.status == 422){
-                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-            }else{
-               this.setState({modal:true, alertmessage:"All Fields Are Required "})
-            }
-             this.setState({isActive:false})
+             console.log(error.response.data)
          })
         }
         else{
-            if(this.state.startTimeThurs<this.state.EndTimeThurs){
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesThurs.length; i++){
+                if(this.state.startTimeThurs < this.state.oldTImeFramesThurs[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeThurs<this.state.EndTimeThurs){
                 let tempSlot = [...this.state.newSlotThurs];
                 tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, durations:tempSlot, other_days:this.state.replicateThursday, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4,ratecard_title_id : this.props.location.state.title_id, other_days:this.state.replicateThursday, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -789,20 +796,13 @@ class RateCardDetails extends React.Component{
                             EndTimeThurs:"",
                             slotNumberThurs:"",
                             newSlotThurs:[],
-                            modal:true,
-                            alertmessage:"Saved!!"
+                            modal:true
                         });
         
                      }
                  })
                  .catch(error=>{
-                     
-             if(error.response.status == 422){
-                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-            }else{
-               this.setState({modal:true, alertmessage:"All Fields Are Required "})
-            }
-                     this.setState({isActive:false})
+                     console.log(error.response.data)
                  })
             }
         }
@@ -879,7 +879,7 @@ class RateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
          console.log(tempSlot);
          axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot,other_days:this.state.replicateFriday, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeFri, other_days:this.state.replicateFriday, end_time:this.state.EndTimeFri,ratecard_title_id : this.props.location.state.title_id, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -893,29 +893,37 @@ class RateCardDetails extends React.Component{
                     EndTimeFri:"",
                     slotNumberFri:"",
                     newSlotFri:[],
-                    modal:true,
-                    alertmessage:"Saved!!"
+                    modal:true
                     });
 
              }
          })
          .catch(error=>{
-             
-            if(error.response.status == 422){
-                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-            }else{
-               this.setState({modal:true, alertmessage:"All Fields Are Required "})
-            }
-             this.setState({isActive:false})
+             console.log(error.response.data)
          })
         }
         else{
-            if(this.state.startTimeFri<this.state.EndTimeFri){
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesFri.length; i++){
+                if(this.state.startTimeFri < this.state.oldTImeFramesFri[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeFri<this.state.EndTimeFri){
                 let tempSlot = [...this.state.newSlotFri];
                 tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot,other_days:this.state.replicateFriday, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot,ratecard_title_id : this.props.location.state.title_id, other_days:this.state.replicateFriday, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -929,20 +937,13 @@ class RateCardDetails extends React.Component{
                             EndTimeFri:"",
                             slotNumberFri:"",
                             newSlotFri:[],
-                            modal:true,
-                            alertmessage:"Saved!!"
+                            modal:true
                         });
         
                      }
                  })
                  .catch(error=>{
-                     console.log(error)
-                     if(error.response.status == 422){
-                         this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-                     }else{
-                        this.setState({modal:true, alertmessage:"All Fields Are Required "})
-                     }
-                     this.setState({isActive:false})
+                     console.log(error.response.data)
                  })
             }
 
@@ -986,7 +987,7 @@ class RateCardDetails extends React.Component{
         const selected = tempSlot.find(item=>item.id===id);
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
-        console.log(tempSlot, value)
+        console.log(tempSlot)
         selectedIndex.unit_id = value;
         return(this.setState({newSlotSat:tempSlot}))
 
@@ -1020,7 +1021,7 @@ class RateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
          console.log(tempSlot);
          axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:6, durations:tempSlot,other_days:this.state.replicateSaturday, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeSat, other_days:this.state.replicateSaturday, end_time:this.state.EndTimeSat,ratecard_title_id : this.props.location.state.title_id, day_id:6, durations:tempSlot, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -1034,29 +1035,37 @@ class RateCardDetails extends React.Component{
                     EndTimeSat:"",
                     slotNumberSat:"",
                     newSlotSat:[],
-                    modal:true,
-                    alertmessage:"Saved!!"
+                    modal:true
                 });
 
              }
          })
          .catch(error=>{
-             
-            if(error.response.status == 422){
-                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-            }else{
-               this.setState({modal:true, alertmessage:"All Fields Are Required "})
-            }
-             this.setState({isActive:false})
+             console.log(error.response.data)
          })
         }
         else{
-            if(this.state.startTimeSat<this.state.EndTimeSat){
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesSat.length; i++){
+                if(this.state.startTimeSat < this.state.oldTImeFramesSat[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeSat<this.state.EndTimeSat){
                 let tempSlot = [...this.state.newSlotSat];
                 tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:6, durations:tempSlot,other_days:this.state.replicateSaturday, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:6, durations:tempSlot,ratecard_title_id : this.props.location.state.title_id, other_days:this.state.replicateSaturday, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -1070,20 +1079,13 @@ class RateCardDetails extends React.Component{
                             EndTimeSat:"",
                             slotNumberSat:"",
                             newSlotSat:[],
-                            modal:true,
-                            alertmessage:"Saved!!"
+                            modal:true
                         });
         
                      }
                  })
                  .catch(error=>{
-                     
-             if(error.response.status == 422){
-                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
-            }else{
-               this.setState({modal:true, alertmessage:"All Fields Are Required "})
-            }
-                     this.setState({isActive:false})
+                     console.log(error.response.data)
                  })
             }
         }
@@ -1160,7 +1162,7 @@ class RateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSun,rate:this.state.rateSun});
          console.log(tempSlot);
          axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:7, durations:tempSlot, other_days:this.state.replicateSunday, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, other_days:this.state.replicateSunday, day_id:7,ratecard_title_id : this.props.location.state.title_id, durations:tempSlot, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -1174,24 +1176,37 @@ class RateCardDetails extends React.Component{
                     EndTimeSun:"",
                     slotNumberSun:"",
                     newSlotSun:[],
-                    modal:true,
-                    alertmessage:"Saved!!"
+                    modal:true
                 });
 
              }
          })
          .catch(error=>{
-             
-             this.setState({isActive:false})
+             console.log(error.response.data)
          })
         }
         else{
-            if(this.state.startTimeSun<this.state.EndTimeSun){
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesSun.length; i++){
+                if(this.state.startTimeSun < this.state.oldTImeFramesSun[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeSun<this.state.EndTimeSun){
                 let tempSlot = [...this.state.newSlotSun];
                 tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSun,rate:this.state.rateSun});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:7, durations:tempSlot, other_days:this.state.replicateSunday, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:7, durations:tempSlot, other_days:this.state.replicateSunday,ratecard_title_id : this.props.location.state.title_id, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -1205,29 +1220,27 @@ class RateCardDetails extends React.Component{
                             EndTimeSun:"",
                             slotNumberSun:"",
                             newSlotSun:[],
-                            modal:true,
-                            alertmessage:"Saved!!"
+                            modal:true
                         });
         
                      }
                  })
                  .catch(error=>{
                      console.log(error)
-                     this.setState({isActive:false})
                  })
             }
         }
     }
 
 
- handleDeleteRatecard=()=>{
+ /* handleDeleteRatecard=()=>{
         axios.delete(`${domain}/api/admin/ratecard/${this.props.location.state.title_id}/delete`,
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
             this.setState({allow:false})
         })
-    }
+    } */
     
     render(){
     return (
@@ -1241,7 +1254,7 @@ class RateCardDetails extends React.Component{
         when={this.state.allow}
         message="You have unsaved changes, are you sure you want to leave?"
         /> */}
-        <NavigationPrompt when={this.state.allow} 
+        {/* <NavigationPrompt when={this.state.allow} 
         afterConfirm={()=>this.handleDeleteRatecard()}
         disableNative={true}
         >
@@ -1256,7 +1269,7 @@ class RateCardDetails extends React.Component{
                 </ModalFooter>
             </Modal>
         )}
-        </NavigationPrompt>
+        </NavigationPrompt>; */}
       <Header/>
         <Container className=" mt--9" fluid>
         {this.state.isActiveSpinner?
@@ -1393,7 +1406,7 @@ class RateCardDetails extends React.Component{
                     ))}
 
                     <Row style={{marginTop:"20px"}}>
-                        <Col md="6" sm='6' lg="6" xs="6">
+                    <Col md="6" sm='6' lg="6" xs="6">
                         {this.state.days.map((value,key)=>(
                             <FormGroup check>
                                 <Label check>
@@ -2113,7 +2126,7 @@ class RateCardDetails extends React.Component{
                 setTimeout(
                     function(){
                         
-                            this.props.history.push("/admin/video-preview",{title_id:this.props.location.state.title_id})
+                            this.props.history.push("/admin/edit/video",{title_id:this.props.location.state.title_id})
                     }
                     .bind(this),
                     500
@@ -2131,8 +2144,8 @@ class RateCardDetails extends React.Component{
            
         </Container>
         <Modal isOpen={this.state.modal}>
-            <ModalHeader style={{textTransform:"capitalize"}}>
-               {this.state.alertmessage}
+            <ModalHeader>
+                Saved!!
             </ModalHeader>
             <ModalFooter>
                 <Button color="danger" onClick={()=>this.setState({modal:false})}>Cancel</Button>
@@ -2146,4 +2159,4 @@ class RateCardDetails extends React.Component{
 }
 
 
-export default RateCardDetails;
+export default EditRateCardDetailsVideo;

@@ -40,7 +40,7 @@ import Pagination from "react-js-pagination";
 import Header from "components/Headers/Header.js";
 
 let user = localStorage.getItem('access_token')
-var domain = "https://admin-backend.kokrokooad.com"
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 class Clients extends React.Component {
 
