@@ -38,7 +38,7 @@ import {
 import { RateConsumer } from "../../context.js";
 
 let user = localStorage.getItem('access_token')
-var domain = "https://admin-backend.kokrokooad.com"
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 class AdminNavbar extends React.Component {
 state={

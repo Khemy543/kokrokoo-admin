@@ -7,7 +7,7 @@ import axios from "axios";
 
 
 let user =localStorage.getItem('access_token');
-var domain = "https://admin-backend.kokrokooad.com"
+var domain = "https://admin.test.backend.kokrokooad.com"
 class GetVolumeDiscount extends React.Component{
     
     state={
@@ -28,7 +28,7 @@ class GetVolumeDiscount extends React.Component{
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
-            this.setState({volume:res.data.data})
+            this.setState({volume:res.data})
         })
         .catch(error=>{
             console.log(error)

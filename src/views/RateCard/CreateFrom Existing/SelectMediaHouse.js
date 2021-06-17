@@ -24,7 +24,7 @@ function ERateSelectMediaHouse(props) {
  const toggle = () => setTooltipOpen(!tooltipOpen);
 
  let user =localStorage.getItem('access_token');
- var domain = "https://admin-backend.kokrokooad.com";
+ var domain = "https://admin.test.backend.kokrokooad.com";
  React.useEffect(()=>{
    setIsActive(true)
     axios.get(`${domain}/api/get/${props.location.state.id}/media-house`,{
@@ -35,7 +35,7 @@ function ERateSelectMediaHouse(props) {
     /* if(!error.response){
         alert("check your internet connection");
     } */
-    console.log(error.response.data)
+    console.log(error)
     })
     .finally((_)=>{
         setIsActive(false)

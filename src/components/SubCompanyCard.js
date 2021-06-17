@@ -12,8 +12,7 @@ export default function SubCompanyCard(props){
     const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
     const toggle = () => setTooltipOpen(!tooltipOpen);
-    const {id, media_house,languages,region, company_name, logo, purpose} = props.data;
-    console.log(props.data)
+    const {id, media_house,languages,region, logo, purpose} = props.data;
 
     return(
         <>

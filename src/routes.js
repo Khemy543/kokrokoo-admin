@@ -41,6 +41,8 @@ import EditRateCardDetailsVideo from "views/RateCard/ViewRateCards/EditRatecards
 import EditVideo from "views/RateCard/ViewRateCards/EditRatecards/PreviewRateCardVideo";
 import EditPrint from "views/RateCard/ViewRateCards/EditRatecards/PreviewRateCardPrint";
 import EditRateCardDetailsPrint from "views/RateCard/ViewRateCards/EditRatecards/EditPrintDetails";
+import SubMediaAccount from "views/UserManagement/SubMediaAccounts";
+import ViewSubMediaDetails from "views/UserManagement/ViewSubMediaDetails";
 
 var routes = [
   {
@@ -55,6 +57,21 @@ var routes = [
     name: "Media",
     header:"user",
     component: Media,
+    layout: "/admin"
+  },
+  {
+    path: "/sub-media",
+    name: "Sub Media Account",
+    header:"user",
+    component: SubMediaAccount,
+    layout: "/admin"
+  },
+  {
+    path: "/sub-company-details",
+    name: "Sub Media Account",
+    header:"user",
+    invisible:true,
+    component: ViewSubMediaDetails,
     layout: "/admin"
   },
   {

@@ -14,7 +14,7 @@ import {
 import Header from "components/Headers/Header.js";
 
 let user = localStorage.getItem('access_token')
-var domain = "https://admin-backend.kokrokooad.com"
+var domain = "https://admin.test.backend.kokrokooad.com"
 
 class ViewClientDetails extends React.Component {
     state={
@@ -30,10 +30,10 @@ class ViewClientDetails extends React.Component {
             {headers:{ 'Authorization':`Bearer ${user}`}})
             .then(res=>{
               console.log(res.data);
-              this.setState({details:res.data.data.user, company:res.data.data.company,role:res.data.data.user.role, isActive:false});
+              this.setState({details:res.data.user, company:res.data.company,role:res.data.user.role, isActive:false});
             })
             .catch(error=>{
-              console.log(error.response.data);
+              console.log(error);
             })
     }
  

@@ -22,14 +22,15 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://admin-backend.kokrokooad.com";
+var domain = "https://admin.test.backend.kokrokooad.com";
 
 function EditRateCardTitle(props) {
     const [isActive, setIsActive] = React.useState(false);
     const [rate_card_title, setTitle] = React.useState(props.location.state.title);
     const [service_description,setDescription] = React.useState(props.location.state.description);
     const [file_types,setFile_types] = React.useState(props.location.state.file_types);
-    const [modal, setModal] = React.useState(false)
+    const [modal, setModal] = React.useState(false);
+
 
     const videoCheck=()=>{
         let myChecked = file_types
@@ -171,7 +172,7 @@ function EditRateCardTitle(props) {
                     <Input type="textarea" placeholder="Enter Description" value={service_description} onChange={e=>setDescription(e.target.value)} required/>
                     </FormGroup>
                     <Label>File Type</Label>
-                    {props.location.state.id == "3"?
+                    {props.location.state.id !== "3"?
                     <>
                     <FormGroup check>
                         <Label check>

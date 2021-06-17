@@ -26,7 +26,7 @@ let user = localStorage.getItem('access_token');
 
 var domain = "https://admin.test.backend.kokrokooad.com";
 
-class Media extends React.Component {
+class SubMediaAccount extends React.Component {
 
   state={
     tool1:false,
@@ -44,7 +44,7 @@ class Media extends React.Component {
   }
 
   componentDidMount(){
-    axios.get(`${domain}/api/admin/fetch-new-registered-media-accounts`,
+    axios.get(`${domain}/api/admin/new/media/houses`,
     {headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
         console.log(res.data);
@@ -94,7 +94,7 @@ class Media extends React.Component {
   //get media
   getMedia(pageNumber=1){
     this.setState({isActive:true})
-  axios.get(`${domain}/api/admin/get-activated-media-admin?page=${pageNumber}`,
+  axios.get(`${domain}/api/admin/approved/media/houses?page=${pageNumber}`,
   {headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
       console.log(res.data)
@@ -110,7 +110,7 @@ class Media extends React.Component {
 activateAccount=(id)=>{
   let tempMedia = this.state.media;
   let tempData = this.state.data;
-  axios.post(`${domain}/api/admin/activate-user/${id}/account`,null,
+  axios.post(`${domain}/api/admin/accept/${id}/new/media/houses`,null,
   {headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
     console.log(res.data)
@@ -163,15 +163,15 @@ unBlockMedia=(id)=>{
 }
 
 //handle VIew
-handleView=( id)=>{
-  this.props.history.push("/admin/company-details",{id:id})
+handleView=(value)=>{
+  this.props.history.push("/admin/sub-company-details",{value})
 
 }
 
 //handleReject
 handleReject=(id)=>{
   let tempData = this.state.media;
-  axios.post(`${domain}/api/admin/reject/${id}/media-account`,null,
+  axios.post(`${domain}/api/admin/reject/${id}/new/media/houses`,null,
   {headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
     console.log(res.data);
@@ -239,10 +239,9 @@ handleReject=(id)=>{
                         <th>#</th>
                         <th>Company</th>
                         <th>Media Type</th>
-                        <th>Name</th>
                         <th>Email</th>
-                        <th>Phone</th>
                         <th>Created At</th>
+                        <th>Status</th>
                         <th>Action</th>
                         </tr>
                     </thead>
@@ -250,16 +249,15 @@ handleReject=(id)=>{
                     {this.state.media.map((value,index)=>(
                         <tr>
                             <th>{index+1}</th>
-                            <th>{value.company.name}</th>
-                            <th>{value.company.media_type.mediaType}</th>
-                            <th>{value.name}</th>
-                            <th>{value.email}</th>
-                            <th>{value.phone1}</th>
-                            <th>{value.created_at.date} {value.created_at.time}</th>
+                            <th>{value.media_house}</th>
+                            <th>{value.media_type}</th>
+                            <th>{value.company_email}</th>
+                            <th>{value.created_at}</th>
+                            <th>{value.reviewed ? "Active" : "Not Active"}</th>
                             <th>
                                <Row>
                                 <Col className="ml-auto mr-auto">
-                                <Button style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.props.history.push("/admin/company-details",{id:value.id})}><i id="view" className="fa fa-eye"/></Button>
+                                <Button style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.handleView(value)}><i id="view" className="fa fa-eye"/></Button>
                                 <Button color="info" style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.activateAccount(value.id)}><i className="fa fa-unlock"/></Button>
                                 <Button color="danger" style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.setState({id:value.id, deleteModal:true})}><i className="fa fa-close"/></Button>
                                </Col>
@@ -291,12 +289,9 @@ handleReject=(id)=>{
                         <th>#</th>
                         <th>Company</th>
                         <th>Media Type</th>
-                        <th>Name</th>
                         <th>Email</th>
-                        <th>Phone</th>
                         <th>Created At</th>
                         <th>Status</th>
-                        <th>Last Login</th>
                         <th>Action</th>
                         <th></th>
                         </tr>
@@ -304,31 +299,23 @@ handleReject=(id)=>{
                     <tbody>
                     {this.state.data.map((value, index)=>(
                         <tr>
-                        <th>{index+1}</th>
-                            <th>{value.company.name}</th>
-                            <th>{value.company.media_type}</th>
-                            <th>{value.name}</th>
-                            <th>{value.email}</th>
-                            <th>{value.phone1}</th>
-                            <th>{value.created_at.date}<br/> {value.created_at.time}</th>
-                            <th>{value.isActive}</th>
-                            <th>{value.last_login}</th>
+                            <th>{index+1}</th>
+                            <th>{value.media_house}</th>
+                            <th>{value.media_type}</th>
+                            <th>{value.company_email}</th>
+                            <th>{value.created_at}</th>
+                            <th>{value.reviewed ? "Active" : "Not Active"}</th>
                             <th>
                                 <Col className="ml-auto mr-auto">
-                                <Row><Button  color="info"  style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.handleView(value.id)}><i id="view" className="fa fa-eye"/></Button></Row>
+                                <Row><Button  color="info"  style={{padding:'0px 6px 0px 6px', marginBottom:"3px"}} onClick={()=>this.handleView(value)}><i id="view" className="fa fa-eye"/></Button></Row>
                                 <Tooltip placement="right" isOpen={this.state.tool1} target="view" toggle={()=>this.toggle1}>
                                   view company
                                 </Tooltip>
-                                {value.isActive !=="active"?
-                                <Row><Button id="unblock" color="success" style={{padding:'0px 6px 0px 6px', marginBottom:"3px" }} onClick={()=>this.unBlockMedia(value.id)}><i className="fa fa-unlock"/></Button></Row>
-                                :
-                                <Row><Button id="block" color="danger" style={{padding:'0px 7px 0px 7px'}} onClick={()=>this.blockMedia(value.id)}><i className="fa fa-lock"/></Button></Row>
-                                }
                                 </Col>
                             </th>
                             <th>
                             <label class="switch">
-                              <input type="checkbox" checked={value.company && value.company.isPublished == 1} onChange={e=>this.togglePublish(value.company && value.company.id,value.company && value.company.isPublished)}/>
+                              <input type="checkbox" checked={value.company && value.company.isPublished == 1} onChange={e=>this.togglePublish(value.id,value.isPublished)}/>
                               <span class="slider round"></span>
                             </label>
                             </th>
@@ -341,14 +328,14 @@ handleReject=(id)=>{
                    </CardBody>
                    <CardFooter>
                    <Pagination
-                   totalItemsCount={this.state.meta.total}
-                   activePage={this.state.meta.current_page}
-                   itemsCountPerPage={this.state.meta.per_page}
-                   onChange={(pageNumber)=>this.getMedia(pageNumber)}
-                   itemClass="page-item"
-                   linkClass="page-link"
-                   firstPageText="First"
-                   lastPageText = "Last"
+                        totalItemsCount={this.state.meta.total}
+                        activePage={this.state.meta.current_page}
+                        itemsCountPerPage={this.state.meta.per_page}
+                        onChange={(pageNumber)=>this.getMedia(pageNumber)}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                        firstPageText="First"
+                        lastPageText = "Last"
                    />
                    </CardFooter>
               </Card>  
@@ -389,4 +376,4 @@ handleReject=(id)=>{
   }
 }
 
-export default Media;
+export default SubMediaAccount;
