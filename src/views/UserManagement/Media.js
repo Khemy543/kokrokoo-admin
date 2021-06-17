@@ -48,10 +48,10 @@ class Media extends React.Component {
     {headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
         console.log(res.data);
-        this.setState({media:res.data.data});
+        this.setState({media:res.data});
     })
     .catch(error=>{
-        console.log(error.response.data);
+        console.log(error);
         this.setState({isActive:false})
     })
 
