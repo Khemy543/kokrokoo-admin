@@ -14,7 +14,7 @@ import {
 import Header from "components/Headers/Header.js";
 import axios from "axios";
 
-var domain = "https://admin.test.backend.kokrokooad.com"
+var domain = "https://admin-backend.kokrokooad.com"
 let user =localStorage.getItem('access_token');
 
 

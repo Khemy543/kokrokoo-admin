@@ -24,7 +24,7 @@ function VRateSelectMediaHouse(props) {
  const toggle = () => setTooltipOpen(!tooltipOpen);
 
  let user =localStorage.getItem('access_token');
- var domain = "https://admin.test.backend.kokrokooad.com";
+ var domain = "https://admin-backend.kokrokooad.com";
  React.useEffect(()=>{
    console.log(props)
    setIsActive(true)

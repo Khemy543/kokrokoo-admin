@@ -49,7 +49,7 @@ if(all_data !== null){
   user = all_data[0];
 }
 
-var domain = "https://admin.test.backend.kokrokooad.com"
+var domain = "https://admin-backend.kokrokooad.com"
 
 class Subscriptions extends React.Component {
 
